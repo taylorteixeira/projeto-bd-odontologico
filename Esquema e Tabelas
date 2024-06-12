@@ -1,66 +1,68 @@
 //Tabelas do Trabalho
 https://dbdiagram.io/d/BD2-665fad33b65d933879847870
 
-Table paciente {
+Table Pacientes {
   PacienteID INT [pk, increment]
   Nome VARCHAR(100) [not null]
   DataNascimento DATE [not null]
   Sexo CHAR(1)
   Endereco VARCHAR(200)
+  Telefone VARCHAR(15)
+  Email VARCHAR(100)
 }
 
-Table dentista {
+Table Dentistas {
   DentistaID INT [pk, increment]
   Nome VARCHAR(100) [not null]
-  CRO VARCHAR(20) [not null, unique] // Conselho Regional de Odontologia
+  CRO VARCHAR(20) [not null, unique]
   Especialidade VARCHAR(50)
+  Telefone VARCHAR(15)
+  Email VARCHAR(100)
 }
 
-Table consulta {
+Table Consultas {
   ConsultaID INT [pk, increment]
-  PacienteID INT [ref: > paciente.PacienteID]
-  DentistaID INT [ref: > dentista.DentistaID]
+  PacienteID INT [ref: > Pacientes.PacienteID]
+  DentistaID INT [ref: > Dentistas.DentistaID]
   DataHora DATETIME [not null]
   Motivo VARCHAR(255)
 }
 
-Table procedimento {
-  ProcedimentoID INT [pk, increment]
+Table Tratamentos {
+  TratamentoID INT [pk, increment]
   Descricao VARCHAR(255) [not null]
   Custo DECIMAL(10, 2)
 }
 
-Table pagamento {
-  PagamentoID INT [pk, increment]
-  Titulo VARCHAR(100)
-  Conteudo TEXT [note: 'Conteúdo do post']
-  Status VARCHAR(50)
-}
-
-Table endereco {
-  EnderecoID INT [pk, increment]
-  Rua VARCHAR(100)
-  Cidade VARCHAR(100)
-  Estado VARCHAR(50)
-  Cep VARCHAR(20)
-  PacienteID INT [ref: > paciente.PacienteID]
-}
-
-Table contato {
-  ContatoID INT [pk, increment]
-  Numero VARCHAR(15)
-  Tipo VARCHAR(50)
-  Telefone VARCHAR(15)
-  Email VARCHAR(100)
-  PacienteID INT [ref: > paciente.PacienteID]
-}
-
-Table prontuario {
+Table Prontuarios {
   ProntuarioID INT [pk, increment]
-  PacienteID INT [ref: > paciente.PacienteID]
-  DentistaID INT [ref: > dentista.DentistaID]
-  Data DATETIME [not null]
+  PacienteID INT [ref: > Pacientes.PacienteID]
+  DentistaID INT [ref: > Dentistas.DentistaID]
+  Data DATETIME
   Diagnostico VARCHAR(255)
-  TratamentoID INT [ref: > procedimento.ProcedimentoID]
-  Observacoes TEXT
+  TratamentoID INT [ref: > Tratamentos.TratamentoID]
+  Observacoes TEXT 
+}
+
+Table Pagamentos {
+  PagamentoID INT [pk, increment]
+  PacienteID INT [ref: > Pacientes.PacienteID]
+  Valor DECIMAL(10, 2) [not null]
+  DataPagamento VARCHAR(50) [not null]
+  MetodoPagamento VARCHAR(50)
+}
+
+Table Agendas {
+  AgendaID INT [pk, increment]
+  DentistaID INT [ref: > Dentistas.DentistaID]
+  DataHora DATETIME
+  Disponivel BIT 
+}
+
+Table Receitas {
+  ReceitaID INT [pk, increment]
+  PacienteID INT [ref: > Pacientes.PacienteID]
+  Valor DECIMAL(10, 2) [not null]
+  DataReceita DATETIME [not null]
+  Descricao VARCHAR(255)
 }
