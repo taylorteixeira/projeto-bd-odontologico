@@ -29,309 +29,291 @@ connection_string = (
     "DRIVER={ODBC Driver 17 for SQL Server};"
     "SERVER=localhost,1433;"
     "UID=sa;"
-    "PWD=YourComplexPassword123!;"
+    "PWD=YourComplexPassword123!;"  # Substitua pela sua senha real
     "Encrypt=yes;"
     "TrustServerCertificate=yes;"
 )
 
-# Conectar com o banco de dados/ Criar o banco de dados
-connection = pyodbc.connect(connection_string)
+try:
+    # Conectar com o banco de dados
+    connection = pyodbc.connect(connection_string)
 
-# Criando o cursor para manipular o connection de dados
-cursor = connection.cursor()
+    # Criando o cursor para manipular o connection de dados
+    cursor = connection.cursor()
 
-# ------------------------- FUNÇÕES -------------------------#
+    # ------------------------- FUNÇÕES -------------------------#
 
-def salvar_alteracoes():
-    connection.commit()
+    def salvar_alteracoes():
+        connection.commit()
 
-def mostrar_dados():
-    # print(cursor.fetchall()) 
-    resultados = cursor.fetchall()
-    # Salvar os resultados em uma lista de listas
-    lista_de_listas = [list(row) for row in resultados]
+    def mostrar_dados(tabela):
+        cursor.execute(f'SELECT * FROM {tabela}')
+        resultados = cursor.fetchall()
+        # Salvar os resultados em uma lista de listas
+        lista_de_listas = [list(row) for row in resultados]
 
-    # Exibir os resultados
-    for lista in lista_de_listas:
-        print(lista)
+        # Exibir os resultados
+        for lista in lista_de_listas:
+            print(lista)
 
-# ---------------------- CREATE TABLES ----------------------#
+    # ---------------------- CREATE TABLES ----------------------#
 
+    def criando_todas_as_tabelas():
+        criando_tabela_pacientes()
+        criando_tabela_dentistas()
+        criando_tabela_consultas()
+        criando_tabela_tratamentos()
+        criando_tabela_prontuarios()
+        criando_tabela_pagamentos()
+        criando_tabela_agendas()
+        criando_tabela_receitas()
 
-# Função para criar todas as tabelas ao mesmo tempo, caso queira criar uma tabela específica, basta chamar a função específica
-def criando_todas_as_tabelas():
-    criando_tabela_pacientes()
-    criando_tabela_dentistas()
-    criando_tabela_consultas()
-    criando_tabela_tratamentos()
-    criando_tabela_prontuarios()
-    criando_tabela_pagamentos()
-    criando_tabela_agendas()
-    criando_tabela_receitas()
-
-
-def criando_tabela_pacientes():
-    cursor.execute('''
-    CREATE TABLE Pacientes (
-    PacienteID INT IDENTITY PRIMARY KEY,
-    Nome VARCHAR(100) NOT NULL,
-    DataNascimento DATE NOT NULL,
-    Sexo CHAR(1),
-    Endereco VARCHAR(200),
-    Telefone VARCHAR(15),
-    Email VARCHAR(100)
-);
-''')   
-    
-def criando_tabela_dentistas(): 
-    cursor.execute('''
-    CREATE TABLE Dentistas (
-    DentistaID INT IDENTITY PRIMARY KEY,
-    Nome VARCHAR(100) NOT NULL,
-    CRO VARCHAR(20) NOT NULL UNIQUE,  -- Conselho Regional de Odontologia
-    Especialidade VARCHAR(50),
-    Telefone VARCHAR(15),
-    Email VARCHAR(100)
-);
-''')
-    
-def criando_tabela_consultas():
-    cursor.execute('''
-    CREATE TABLE Consultas (
-    ConsultaID INT IDENTITY PRIMARY KEY,
-    PacienteID INT,
-    DentistaID INT,
-    DataHora DATETIME NOT NULL,
-    Motivo VARCHAR(255),
-    FOREIGN KEY (PacienteID) REFERENCES Pacientes(PacienteID),
-    FOREIGN KEY (DentistaID) REFERENCES Dentistas(DentistaID)
-);
-''')
-
-def criando_tabela_tratamentos():
-    cursor.execute('''
-    CREATE TABLE Tratamentos (
-    TratamentoID INT IDENTITY PRIMARY KEY,
-    Descricao VARCHAR(255) NOT NULL,
-    Custo DECIMAL(10, 2)
-);
-''')
-
-def criando_tabela_prontuarios():
-    cursor.execute('''
-    CREATE TABLE Prontuarios (
-    ProntuarioID INT IDENTITY PRIMARY KEY,
-    PacienteID INT,
-    DentistaID INT,
-    Data DATETIME NOT NULL,
-    Diagnostico VARCHAR(255),
-    TratamentoID INT,
-    Observacoes TEXT,
-    FOREIGN KEY (PacienteID) REFERENCES Pacientes(PacienteID),
-    FOREIGN KEY (DentistaID) REFERENCES Dentistas(DentistaID),
-    FOREIGN KEY (TratamentoID) REFERENCES Tratamentos(TratamentoID)
-);
-''')
-
-def criando_tabela_pagamentos():
-    cursor.execute('''
-    CREATE TABLE Pagamentos (
-    PagamentoID INT IDENTITY PRIMARY KEY,
-    PacienteID INT,
-    Valor DECIMAL(10, 2) NOT NULL,
-    DataPagamento DATE NOT NULL,
-    MetodoPagamento VARCHAR(50),
-    FOREIGN KEY (PacienteID) REFERENCES Pacientes(PacienteID)
-);
-''')
-
-def criando_tabela_agendas():
-    cursor.execute('''
-    CREATE TABLE Agendas (
-    AgendaID INT IDENTITY PRIMARY KEY,
-    DentistaID INT,
-    DataHora DATETIME NOT NULL,
-    Disponivel bit NOT NULL,
-    FOREIGN KEY (DentistaID) REFERENCES Dentistas(DentistaID)
-);
-''')
-
-def criando_tabela_receitas():
-    cursor.execute('''
-    CREATE TABLE Receitas (
-    ReceitaID INT IDENTITY PRIMARY KEY,
-    PacienteID INT,
-    Valor DECIMAL(10, 2) NOT NULL,
-    DataReceita DATE NOT NULL,
-    Descricao VARCHAR(255),
-    FOREIGN KEY (PacienteID) REFERENCES Pacientes(PacienteID)
-);
-''')
-
-
-# -------------------- INSERT INTO TABLES --------------------#
-
-
-# Função para inserir todos os dados iniciais ao mesmo tempo, caso queira inserir dados em uma tabela específica, basta chamar a função específica
-def inserindo_todos_os_dados_iniciais():
-    inserindo_dados_iniciais_pacientes()
-    inserindo_dados_iniciais_dentistas()
-    inserindo_dados_iniciais_consultas()
-    inserindo_dados_iniciais_tratamentos()
-    inserindo_dados_iniciais_prontuarios()
-    inserindo_dados_iniciais_pagamentos()
-    inserindo_dados_iniciais_agendas()
-    inserindo_dados_iniciais_receitas()
-
-
-def inserindo_dados_iniciais_pacientes():
-    cursor.execute('''
-    INSERT INTO Pacientes (Nome, DataNascimento, Sexo, Endereco, Telefone, Email) VALUES
-    ('João Silva', '1985-06-15', 'M', 'Rua das Flores, 123', '11987654321', 'joao.silva@gmail.com'),
-    ('Maria Oliveira', '1990-04-25', 'F', 'Av. Paulista, 456', '11976543210', 'maria.oliveira@gmail.com'),
-    ('Carlos Santos', '1978-11-30', 'M', 'Rua das Laranjeiras, 789', '11965432109', 'carlos.santos@gmail.com'),
-    ('Ana Costa', '1982-08-20', 'F', 'Rua dos Pinheiros, 101', '11954321098', 'ana.costa@gmail.com'),
-    ('Pedro Martins', '1995-12-10', 'M', 'Rua da Glória, 202', '11943210987', 'pedro.martins@gmail.com'),
-    ('Fernanda Almeida', '1986-07-11', 'F', 'Rua dos Jacarandás, 321', '11932109876', 'fernanda.almeida@gmail.com'),
-    ('Paulo Rodrigues', '1975-05-09', 'M', 'Av. Liberdade, 654', '11921098765', 'paulo.rodrigues@gmail.com'),
-    ('Clara Mendes', '1992-03-17', 'F', 'Rua das Palmeiras, 888', '11910987654', 'clara.mendes@gmail.com'),
-    ('Ricardo Pereira', '1988-12-22', 'M', 'Rua dos Lírios, 777', '11909876543', 'ricardo.pereira@gmail.com'),
-    ('Juliana Freitas', '1991-11-19', 'F', 'Rua das Rosas, 999', '11998765432', 'juliana.freitas@gmail.com');
+    def criando_tabela_pacientes():
+        cursor.execute('''
+        CREATE TABLE Pacientes (
+        PacienteID INT IDENTITY PRIMARY KEY,
+        Nome VARCHAR(100) NOT NULL,
+        DataNascimento DATE NOT NULL,
+        Sexo CHAR(1),
+        Endereco VARCHAR(200),
+        Telefone VARCHAR(15),
+        Email VARCHAR(100)
+    );
     ''')
 
-def inserindo_dados_iniciais_dentistas():
-    cursor.execute('''
-    INSERT INTO Dentistas (Nome, CRO, Especialidade, Telefone, Email) VALUES
-    ('Dr. Fernando Almeida', 'SP12345', 'Ortodontia', '11987654322', 'fernando.almeida@clinica.com'),
-    ('Dra. Paula Souza', 'SP54321', 'Endodontia', '11987654323', 'paula.souza@clinica.com'),
-    ('Dr. Ricardo Lima', 'SP67890', 'Periodontia', '11987654324', 'ricardo.lima@clinica.com'),
-    ('Dra. Juliana Mendes', 'SP09876', 'Odontopediatria', '11987654325', 'juliana.mendes@clinica.com'),
-    ('Dr. Gustavo Ferreira', 'SP13579', 'Implantodontia', '11987654326', 'gustavo.ferreira@clinica.com'),
-    ('Dra. Mariana Lima', 'SP24680', 'Prótese Dentária', '11987654327', 'mariana.lima@clinica.com'),
-    ('Dr. Rafael Moreira', 'SP97531', 'Dentística', '11987654328', 'rafael.moreira@clinica.com'),
-    ('Dra. Sofia Costa', 'SP86420', 'Patologia Bucal', '11987654329', 'sofia.costa@clinica.com');
+    def criando_tabela_dentistas(): 
+        cursor.execute('''
+        CREATE TABLE Dentistas (
+        DentistaID INT IDENTITY PRIMARY KEY,
+        Nome VARCHAR(100) NOT NULL,
+        CRO VARCHAR(20) NOT NULL UNIQUE,  -- Conselho Regional de Odontologia
+        Especialidade VARCHAR(50),
+        Telefone VARCHAR(15),
+        Email VARCHAR(100)
+    );
     ''')
 
-def inserindo_dados_iniciais_consultas():
-    cursor.execute('''      
-    INSERT INTO Consultas (PacienteID, DentistaID, DataHora, Motivo) VALUES
-    (1, 1, '2024-06-12 09:00:00', 'Consulta de rotina'),
-    (2, 2, '2024-06-12 10:00:00', 'Dor de dente'),
-    (3, 3, '2024-06-12 11:00:00', 'Gengivite'),
-    (4, 4, '2024-06-12 14:00:00', 'Consulta de rotina'),
-    (5, 5, '2024-06-12 15:00:00', 'Implante dentário'),
-    (6, 6, '2024-06-13 09:30:00', 'Prótese dentária'),
-    (7, 7, '2024-06-13 10:30:00', 'Restauração dental'),
-    (8, 8, '2024-06-13 11:30:00', 'Lesão na boca'),
-    (9, 1, '2024-06-14 09:00:00', 'Consulta de rotina'),
-    (10, 2, '2024-06-14 10:00:00', 'Dor de dente');
+    def criando_tabela_consultas():
+        cursor.execute('''
+        CREATE TABLE Consultas (
+        ConsultaID INT IDENTITY PRIMARY KEY,
+        PacienteID INT,
+        DentistaID INT,
+        DataHora DATETIME NOT NULL,
+        Motivo VARCHAR(255),
+        FOREIGN KEY (PacienteID) REFERENCES Pacientes(PacienteID),
+        FOREIGN KEY (DentistaID) REFERENCES Dentistas(DentistaID)
+    );
     ''')
 
-def inserindo_dados_iniciais_tratamentos():
-    cursor.execute('''
-    INSERT INTO Tratamentos (Descricao, Custo) VALUES
-    ('Limpeza Dentária', 200.00),
-    ('Canal Radicular', 800.00),
-    ('Extração de Dente', 300.00),
-    ('Clareamento Dental', 1000.00),
-    ('Implante Dentário', 3000.00),
-    ('Prótese Dentária', 2500.00),
-    ('Restauração Dental', 500.00),
-    ('Tratamento de Gengivite', 600.00),
-    ('Ortodontia (Aparelho)', 3500.00),
-    ('Odontopediatria (Consulta)', 150.00);
+    def criando_tabela_tratamentos():
+        cursor.execute('''
+        CREATE TABLE Tratamentos (
+        TratamentoID INT IDENTITY PRIMARY KEY,
+        Descricao VARCHAR(255) NOT NULL,
+        Custo DECIMAL(10, 2)
+    );
     ''')
 
-def inserindo_dados_iniciais_prontuarios():
-    cursor.execute('''
-    INSERT INTO Prontuarios (PacienteID, DentistaID, Data, Diagnostico, TratamentoID, Observacoes) VALUES
-    (1, 1, '2024-06-12 09:00:00', 'Boa saúde bucal', 1, 'Paciente em boas condições.'),
-    (2, 2, '2024-06-12 10:00:00', 'Cárie dentária', 2, 'Recomendada realização de canal.'),
-    (3, 3, '2024-06-12 11:00:00', 'Gengivite', 3, 'Necessária extração de dente.'),
-    (4, 4, '2024-06-12 14:00:00', 'Boa saúde bucal', 1, 'Paciente em boas condições.'),
-    (5, 5, '2024-06-12 15:00:00', 'Perda de dente', 5, 'Realizar implante dentário.'),
-    (6, 6, '2024-06-13 09:30:00', 'Dente quebrado', 6, 'Colocar prótese.'),
-    (7, 7, '2024-06-13 10:30:00', 'Cárie', 7, 'Restauração necessária.'),
-    (8, 8, '2024-06-13 11:30:00', 'Lesão benigna', 8, 'Acompanhamento.'),
-    (9, 1, '2024-06-14 09:00:00', 'Boa saúde bucal', 1, 'Paciente em boas condições.'),
-    (10, 2, '2024-06-14 10:00:00', 'Cárie dentária', 2, 'Recomendada realização de canal.');
+    def criando_tabela_prontuarios():
+        cursor.execute('''
+        CREATE TABLE Prontuarios (
+        ProntuarioID INT IDENTITY PRIMARY KEY,
+        PacienteID INT,
+        DentistaID INT,
+        Data DATETIME NOT NULL,
+        Diagnostico VARCHAR(255),
+        TratamentoID INT,
+        Observacoes TEXT,
+        FOREIGN KEY (PacienteID) REFERENCES Pacientes(PacienteID),
+        FOREIGN KEY (DentistaID) REFERENCES Dentistas(DentistaID),
+        FOREIGN KEY (TratamentoID) REFERENCES Tratamentos(TratamentoID)
+    );
     ''')
 
-def inserindo_dados_iniciais_pagamentos():
-    cursor.execute('''
-    INSERT INTO Pagamentos (PacienteID, Valor, DataPagamento, MetodoPagamento) VALUES
-    (1, 200.00, '2024-06-12', 'Cartão de Crédito'),
-    (2, 800.00, '2024-06-12', 'Dinheiro'),
-    (3, 300.00, '2024-06-12', 'Cartão de Débito'),
-    (4, 200.00, '2024-06-12', 'Cartão de Crédito'),
-    (5, 3000.00, '2024-06-12', 'Transferência Bancária'),
-    (6, 2500.00, '2024-06-13', 'Cartão de Crédito'),
-    (7, 500.00, '2024-06-13', 'Dinheiro'),
-    (8, 600.00, '2024-06-13', 'Cartão de Débito'),
-    (9, 200.00, '2024-06-14', 'Cartão de Crédito'),
-    (10, 800.00, '2024-06-14', 'Dinheiro');
+    def criando_tabela_pagamentos():
+        cursor.execute('''
+        CREATE TABLE Pagamentos (
+        PagamentoID INT IDENTITY PRIMARY KEY,
+        PacienteID INT,
+        Valor DECIMAL(10, 2) NOT NULL,
+        DataPagamento DATE NOT NULL,
+        MetodoPagamento VARCHAR(50),
+        FOREIGN KEY (PacienteID) REFERENCES Pacientes(PacienteID)
+    );
     ''')
 
-def inserindo_dados_iniciais_agendas():
-    cursor.execute('''
-    INSERT INTO Agendas (DentistaID, DataHora, Disponivel) VALUES
-    (1, '2024-06-13 09:00:00', 0),
-    (2, '2024-06-13 10:00:00', 1),
-    (3, '2024-06-13 11:00:00', 1),
-    (4, '2024-06-13 14:00:00', 0),
-    (5, '2024-06-13 15:00:00', 0),
-    (6, '2024-06-14 09:30:00', 1),
-    (7, '2024-06-14 10:30:00', 1),
-    (8, '2024-06-14 11:30:00', 1),
-    (1, '2024-06-15 09:00:00', 1),
-    (2, '2024-06-15 10:00:00', 1);
+    def criando_tabela_agendas():
+        cursor.execute('''
+        CREATE TABLE Agendas (
+        AgendaID INT IDENTITY PRIMARY KEY,
+        DentistaID INT,
+        DataHora DATETIME NOT NULL,
+        Disponivel bit NOT NULL,
+        FOREIGN KEY (DentistaID) REFERENCES Dentistas(DentistaID)
+    );
     ''')
 
-def inserindo_dados_iniciais_receitas():
-    cursor.execute('''
-    INSERT INTO Receitas (PacienteID, Valor, DataReceita, Descricao) VALUES
-    (1, 200.00, '2024-06-12', 'Limpeza Dentária'),
-    (2, 800.00, '2024-06-12', 'Tratamento de Canal'),
-    (3, 300.00, '2024-06-12', 'Extração de Dente'),
-    (4, 200.00, '2024-06-12', 'Limpeza Dentária'),
-    (5, 3000.00, '2024-06-12', 'Implante Dentário'),
-    (6, 2500.00, '2024-06-13', 'Prótese Dentária'),
-    (7, 500.00, '2024-06-13', 'Restauração Dental'),
-    (8, 600.00, '2024-06-13', 'Tratamento de Gengivite'),
-    (9, 200.00, '2024-06-14', 'Limpeza Dentária'),
-    (10, 800.00, '2024-06-14', 'Tratamento de Canal');
+    def criando_tabela_receitas():
+        cursor.execute('''
+        CREATE TABLE Receitas (
+        ReceitaID INT IDENTITY PRIMARY KEY,
+        PacienteID INT,
+        Valor DECIMAL(10, 2) NOT NULL,
+        DataReceita DATE NOT NULL,
+        Descricao VARCHAR(255),
+        FOREIGN KEY (PacienteID) REFERENCES Pacientes(PacienteID)
+    );
     ''')
 
+    # -------------------- INSERT INTO TABLES --------------------#
 
-# ---------------------- DELETE TABLES ----------------------#
+    def inserindo_todos_os_dados_iniciais():
+        inserindo_dados_iniciais_pacientes()
+        inserindo_dados_iniciais_dentistas()
+        inserindo_dados_iniciais_consultas()
+        inserindo_dados_iniciais_tratamentos()
+        inserindo_dados_iniciais_prontuarios()
+        inserindo_dados_iniciais_pagamentos()
+        inserindo_dados_iniciais_agendas()
+        inserindo_dados_iniciais_receitas()
 
+    def inserindo_dados_iniciais_pacientes():
+        cursor.execute('''
+        INSERT INTO Pacientes (Nome, DataNascimento, Sexo, Endereco, Telefone, Email) VALUES
+        ('João Silva', '1985-06-15', 'M', 'Rua das Flores, 123', '11987654321', 'joao.silva@gmail.com'),
+        ('Maria Oliveira', '1990-04-25', 'F', 'Av. Paulista, 456', '11976543210', 'maria.oliveira@gmail.com'),
+        ('Carlos Santos', '1978-11-30', 'M', 'Rua das Laranjeiras, 789', '11965432109', 'carlos.santos@gmail.com'),
+        ('Ana Costa', '1982-08-20', 'F', 'Rua dos Pinheiros, 101', '11954321098', 'ana.costa@gmail.com'),
+        ('Pedro Martins', '1995-12-10', 'M', 'Rua da Glória, 202', '11943210987', 'pedro.martins@gmail.com'),
+        ('Fernanda Almeida', '1986-07-11', 'F', 'Rua dos Jacarandás, 321', '11932109876', 'fernanda.almeida@gmail.com'),
+        ('Paulo Rodrigues', '1975-05-09', 'M', 'Av. Liberdade, 654', '11921098765', 'paulo.rodrigues@gmail.com'),
+        ('Clara Mendes', '1992-03-17', 'F', 'Rua das Palmeiras, 888', '11910987654', 'clara.mendes@gmail.com'),
+        ('Ricardo Pereira', '1988-12-22', 'M', 'Rua dos Lírios, 777', '11909876543', 'ricardo.pereira@gmail.com'),
+        ('Juliana Freitas', '1991-11-19', 'F', 'Rua das Rosas, 999', '11998765432', 'juliana.freitas@gmail.com');
+        ''')
 
-def tirando_tabelas(tabela):
-    cursor.execute(f'''
-    DROP TABLE {tabela}
-''')
+    def inserindo_dados_iniciais_dentistas():
+        cursor.execute('''
+        INSERT INTO Dentistas (Nome, CRO, Especialidade, Telefone, Email) VALUES
+        ('Dr. Fernando Almeida', 'SP12345', 'Ortodontia', '11987654321', 'dr.fernando.almeida@gmail.com'),
+        ('Dra. Camila Silva', 'SP54321', 'Endodontia', '11976543210', 'dra.camila.silva@gmail.com'),
+        ('Dr. Ricardo Mendes', 'SP67890', 'Implantodontia', '11965432109', 'dr.ricardo.mendes@gmail.com'),
+        ('Dra. Juliana Santos', 'SP09876', 'Prótese Dentária', '11954321098', 'dra.juliana.santos@gmail.com'),
+        ('Dr. Paulo Oliveira', 'SP11223', 'Periodontia', '11943210987', 'dr.paulo.oliveira@gmail.com');
+        ''')
 
+    def inserindo_dados_iniciais_consultas():
+        cursor.execute('''
+        INSERT INTO Consultas (PacienteID, DentistaID, DataHora, Motivo) VALUES
+        (1, 1, '2023-05-10 09:00', 'Avaliação inicial'),
+        (2, 2, '2023-05-11 10:00', 'Tratamento de canal'),
+        (3, 3, '2023-05-12 11:00', 'Implante dentário'),
+        (4, 4, '2023-05-13 14:00', 'Prótese dentária'),
+        (5, 5, '2023-05-14 15:00', 'Limpeza'),
+        (6, 1, '2023-05-15 09:00', 'Aparelho ortodôntico'),
+        (7, 2, '2023-05-16 10:00', 'Tratamento de canal'),
+        (8, 3, '2023-05-17 11:00', 'Implante dentário'),
+        (9, 4, '2023-05-18 14:00', 'Prótese dentária'),
+        (10, 5, '2023-05-19 15:00', 'Limpeza');
+        ''')
 
-# ------------------- UTILIZAÇÃO DE COMANDOS ----------------#
+    def inserindo_dados_iniciais_tratamentos():
+        cursor.execute('''
+        INSERT INTO Tratamentos (Descricao, Custo) VALUES
+        ('Tratamento de Canal', 1200.00),
+        ('Implante Dentário', 3500.00),
+        ('Prótese Dentária', 1500.00),
+        ('Aparelho Ortodôntico', 2500.00),
+        ('Limpeza', 200.00);
+        ''')
 
-#Utilize os comandos aqui
+    def inserindo_dados_iniciais_prontuarios():
+        cursor.execute('''
+        INSERT INTO Prontuarios (PacienteID, DentistaID, Data, Diagnostico, TratamentoID, Observacoes) VALUES
+        (1, 1, '2023-05-10', 'Cárie em dente molar', 1, 'Paciente deverá retornar em 1 mês'),
+        (2, 2, '2023-05-11', 'Necrose pulpar', 1, 'Canal finalizado com sucesso'),
+        (3, 3, '2023-05-12', 'Perda de dente', 2, 'Implante realizado'),
+        (4, 4, '2023-05-13', 'Fratura dentária', 3, 'Prótese instalada'),
+        (5, 5, '2023-05-14', 'Gengivite', 5, 'Recomendado uso de antisséptico bucal'),
+        (6, 1, '2023-05-15', 'Mordida cruzada', 4, 'Aparelho instalado'),
+        (7, 2, '2023-05-16', 'Cárie profunda', 1, 'Tratamento de canal realizado'),
+        (8, 3, '2023-05-17', 'Ausência de dente', 2, 'Implante realizado com sucesso'),
+        (9, 4, '2023-05-18', 'Desgaste dentário', 3, 'Prótese colocada'),
+        (10, 5, '2023-05-19', 'Tártaro', 5, 'Limpeza realizada, paciente orientado sobre higiene bucal');
+        ''')
 
-# criando_tabela_agendas()
-# inserindo_dados_iniciais_agendas()
+    def inserindo_dados_iniciais_pagamentos():
+        cursor.execute('''
+        INSERT INTO Pagamentos (PacienteID, Valor, DataPagamento, MetodoPagamento) VALUES
+        (1, 1200.00, '2023-05-10', 'Cartão de Crédito'),
+        (2, 1500.00, '2023-05-11', 'Boleto Bancário'),
+        (3, 3500.00, '2023-05-12', 'Transferência Bancária'),
+        (4, 200.00, '2023-05-13', 'Dinheiro'),
+        (5, 2500.00, '2023-05-14', 'Cartão de Débito'),
+        (6, 1200.00, '2023-05-15', 'Cartão de Crédito'),
+        (7, 1500.00, '2023-05-16', 'Boleto Bancário'),
+        (8, 3500.00, '2023-05-17', 'Transferência Bancária'),
+        (9, 200.00, '2023-05-18', 'Dinheiro'),
+        (10, 2500.00, '2023-05-19', 'Cartão de Débito');
+        ''')
 
-# tirando_tabelas("agendas")
+    def inserindo_dados_iniciais_agendas():
+        cursor.execute('''
+        INSERT INTO Agendas (DentistaID, DataHora, Disponivel) VALUES
+        (1, '2023-05-10 09:00', 0),
+        (2, '2023-05-11 10:00', 0),
+        (3, '2023-05-12 11:00', 0),
+        (4, '2023-05-13 14:00', 0),
+        (5, '2023-05-14 15:00', 0),
+        (1, '2023-05-15 09:00', 0),
+        (2, '2023-05-16 10:00', 0),
+        (3, '2023-05-17 11:00', 0),
+        (4, '2023-05-18 14:00', 0),
+        (5, '2023-05-19 15:00', 0);
+        ''')
 
+    def inserindo_dados_iniciais_receitas():
+        cursor.execute('''
+        INSERT INTO Receitas (PacienteID, Valor, DataReceita, Descricao) VALUES
+        (1, 1200.00, '2023-05-10', 'Receita 1'),
+        (2, 1500.00, '2023-05-11', 'Receita 2'),
+        (3, 3500.00, '2023-05-12', 'Receita 3'),
+        (4, 200.00, '2023-05-13', 'Receita 4'),
+        (5, 2500.00, '2023-05-14', 'Receita 5'),
+        (6, 1200.00, '2023-05-15', 'Receita 6'),
+        (7, 1500.00, '2023-05-16', 'Receita 7'),
+        (8, 3500.00, '2023-05-17', 'Receita 8'),
+        (9, 200.00, '2023-05-18', 'Receita 9'),
+        (10, 2500.00, '2023-05-19', 'Receita 10');
+        ''')
 
+    # ---------------------- DELETE TABLES ----------------------#
 
+    def tirando_tabelas():
+        cursor.execute('DROP TABLE IF EXISTS Pacientes')
+        cursor.execute('DROP TABLE IF EXISTS Dentistas')
+        cursor.execute('DROP TABLE IF EXISTS Consultas')
+        cursor.execute('DROP TABLE IF EXISTS Tratamentos')
+        cursor.execute('DROP TABLE IF EXISTS Prontuarios')
+        cursor.execute('DROP TABLE IF EXISTS Pagamentos')
+        cursor.execute('DROP TABLE IF EXISTS Agendas')
+        cursor.execute('DROP TABLE IF EXISTS Receitas')
 
+    # ----------------------- MAIN --------------------------#
 
+    def main():
+        tirando_tabelas()
+        criando_todas_as_tabelas()
+        inserindo_todos_os_dados_iniciais()
+        salvar_alteracoes()
+        mostrar_dados('Pacientes')  # Exemplo de como mostrar os dados de uma tabela
 
+    if __name__ == '__main__':
+        main()
 
-# ------------------- EXECUÇÃO E FECHAMENTO ------------------#
-
-salvar_alteracoes()
-
-connection.close()
-
-#=============================================================#
-#=============================================================#
+except pyodbc.Error as e:
+    print("Error: ", e)
+finally:
+    if 'connection' in locals():
+        connection.close()
