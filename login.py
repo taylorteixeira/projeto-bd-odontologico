@@ -29,14 +29,14 @@ def login():
         email = input("Digite seu email: ")
         senha = input("Digite sua senha: ")
         
-        cursor.execute("SELECT * FROM Pacientes WHERE Email = ? AND Senha = ?", (email, senha))
+        cursor.execute(f"SELECT * FROM Pacientes WHERE Email = {email} AND Senha = {senha}")
         paciente = cursor.fetchone()
         
         if paciente:
             print("Login bem-sucedido para paciente")
             return "Paciente"
         
-        cursor.execute("SELECT * FROM Dentistas WHERE Email = ? AND Senha = ?", (email, senha))
+        cursor.execute(f"SELECT * FROM Dentistas WHERE Email = {email} AND Senha = {senha}")
         dentista = cursor.fetchone()
         
         if dentista:
@@ -49,5 +49,3 @@ def login():
     
     print("Número de tentativas excedido")
     return False
-    
-
