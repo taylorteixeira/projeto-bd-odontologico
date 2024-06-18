@@ -290,7 +290,7 @@ try:
 
     # ---------------------- DELETE TABLES ----------------------#
 
-    def tirando_tabelas():
+    def tirando_todas_as_tabelas():
         cursor.execute('DROP TABLE IF EXISTS Pacientes')
         cursor.execute('DROP TABLE IF EXISTS Dentistas')
         cursor.execute('DROP TABLE IF EXISTS Consultas')
@@ -300,17 +300,16 @@ try:
         cursor.execute('DROP TABLE IF EXISTS Agendas')
         cursor.execute('DROP TABLE IF EXISTS Receitas')
 
-    # ----------------------- MAIN --------------------------#
+    def tirando_tabela(tabela):
+        cursor.execute(f'DROP TABLE {tabela}')
 
-    def main():
-        tirando_tabelas()
-        criando_todas_as_tabelas()
-        inserindo_todos_os_dados_iniciais()
-        salvar_alteracoes()
-        mostrar_dados('Pacientes')  # Exemplo de como mostrar os dados de uma tabela
+    # -------------------- RODANDO CÓDIGO -----------------------#
 
-    if __name__ == '__main__':
-        main()
+    # Utilize as funções abaixo para rodar o código
+
+    # mostrar_dados('Pacientes')
+
+    # -------------------------------------------------------#
 
 except pyodbc.Error as e:
     print("Error: ", e)

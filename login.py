@@ -22,17 +22,32 @@ os.system('cls')
 # Criando o cursor para manipular o banco de dados
 cursor = connection.cursor()
 
-def login(email, senha):
-    cursor.execute("SELECT * FROM Pacientes WHERE Email = ? AND Senha = ?", (email, senha))
-    paciente = cursor.fetchone()
+def login():
+    x = 3
+    while x > 0:
+
+        email = input("Digite seu email: ")
+        senha = input("Digite sua senha: ")
+        
+        cursor.execute("SELECT * FROM Pacientes WHERE Email = ? AND Senha = ?", (email, senha))
+        paciente = cursor.fetchone()
+        
+        if paciente:
+            print("Login bem-sucedido para paciente")
+            return True
+        
+        cursor.execute("SELECT * FROM Dentistas WHERE Email = ? AND Senha = ?", (email, senha))
+        dentista = cursor.fetchone()
+        
+        if dentista:
+            print("Login bem-sucedido para dentista")
+            return True
+        
+        else: 
+            x -= 1
+            print(f"Email ou senha incorretos, você ainda possui {x} tentativas.")
     
-    if paciente:
-        return "Login bem-sucedido para paciente"
+    print("Número de tentativas excedido")
+    return False
     
-    cursor.execute("SELECT * FROM Dentistas WHERE Email = ? AND Senha = ?", (email, senha))
-    dentista = cursor.fetchone()
-    
-    if dentista:
-        return "Login bem-sucedido para dentista"
-    
-    return "Email ou senha incorretos"
+
