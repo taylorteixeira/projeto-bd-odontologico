@@ -34,14 +34,14 @@ def login():
         
         if paciente:
             print("Login bem-sucedido para paciente")
-            return True
+            return "Paciente"
         
         cursor.execute("SELECT * FROM Dentistas WHERE Email = ? AND Senha = ?", (email, senha))
         dentista = cursor.fetchone()
         
         if dentista:
             print("Login bem-sucedido para dentista")
-            return True
+            return "Dentista"
         
         else: 
             x -= 1

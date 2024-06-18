@@ -17,12 +17,17 @@ def main():
     if login_ou_cadastro == "1":
         resultado_login = login()
         if resultado_login:
+            if resultado_login == "Paciente":
+                acesso_ao_sistema_paciente = True
+            elif resultado_login == "Dentista":
+                acesso_ao_sistema_dentista = True
             acesso_ao_sistema = True
 
     if login_ou_cadastro == "2":
         #Lógica de cadastro
         resultado_cadastro = cadastro() # Ainda não funcional
         if resultado_cadastro:
+            acesso_ao_sistema_paciente = True
             acesso_ao_sistema = True
 
     elif login_ou_cadastro == "3":
@@ -32,7 +37,10 @@ def main():
 
     if acesso_ao_sistema:
         # Menu principal e sistema aqui
-        pass
+        if acesso_ao_sistema_paciente:
+            pass
+        elif acesso_ao_sistema_dentista:
+            pass
 
     else:
         return 
