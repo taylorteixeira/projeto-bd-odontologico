@@ -16,7 +16,7 @@ connection_string = (
 )
 
 connection = connect(connection_string)
-time.sleep(2)
+time.sleep(1)
 os.system('cls')
 
 # Criando o cursor para manipular o banco de dados

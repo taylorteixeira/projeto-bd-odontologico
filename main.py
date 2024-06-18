@@ -1,6 +1,8 @@
 # import scriptCRUD as crud
 from login import login
 from cadastro import cadastro
+import os
+import time
 
 def main():
     # Exemplo de uso das funções CRUD
@@ -12,7 +14,18 @@ def main():
     # PARTE 01: LOGIN/CADASTRO NO SISTEMA:
 
     print("Bem-vindo ao sistema!\n")
-    login_ou_cadastro = input("1- Login\n2- Cadastro\n3- Sair\n\nEscolha uma opção: ")
+    while True:
+        login_ou_cadastro = int(input("1- Login\n2- Cadastro\n3- Sair\n\nEscolha uma opção: "))
+
+        if login_ou_cadastro in [1, 2, 3]:
+            break
+        else:
+            time.sleep(1)
+            os.system('cls')
+            print("Opção inválida, tente novamente.\n")
+            time.sleep(1)
+            os.system('cls')
+            continue
 
     if login_ou_cadastro == "1":
         resultado_login = login()
@@ -44,8 +57,6 @@ def main():
 
     else:
         return 
-        
-
 
 if __name__ == "__main__":
     main()
