@@ -17,18 +17,16 @@ def main():
     if login_ou_cadastro == "1":
         resultado_login = login()
         if resultado_login:
-            print("\nBem-vindo ao sistema!")
             acesso_ao_sistema = True
 
     if login_ou_cadastro == "2":
         #Lógica de cadastro
         resultado_cadastro = cadastro() # Ainda não funcional
         if resultado_cadastro:
-            print("\nBem-vindo ao sistema!")
             acesso_ao_sistema = True
 
     elif login_ou_cadastro == "3":
-        return ''
+        return 
 
     # PARTE 02: MENU PRINCIPAL DO SISTEMA:
 
@@ -37,8 +35,7 @@ def main():
         pass
 
     else:
-        # Quebrar codigo aqui
-        pass
+        return 
         
 
 
