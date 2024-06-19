@@ -12,6 +12,7 @@ Abra o arquivo scriptCRUD.py em seu VSCODE e clique em ``run``.
 
 ## 👷🏽 Desenvolvedores:
 
+- [Alexandre Destro](https://github.com/AlexandreDestro)
 - [Cauã Loch](https://github.com/CauaLoch9860)
 - [Eduardo Ribarski](https://github.com/ribarski)
 - [Eryc Jacinto](https://github.com/ErycMJ)
