@@ -305,14 +305,15 @@ try:
 
     # -------------------- RODANDO CÓDIGO -----------------------#
 
-    # Utilize as funções abaixo para rodar o código
-
-    # mostrar_dados('Pacientes')
+    def executar_SQL(SQL):
+        cursor.execute(SQL)
+        salvar_alteracoes()
 
     # -------------------------------------------------------#
 
 except pyodbc.Error as e:
     print("Error: ", e)
+
 finally:
     if 'connection' in locals():
         connection.close()

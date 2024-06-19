@@ -1,15 +1,14 @@
-# import scriptCRUD as crud
+from conexao_banco import salvar_alteracoes, mostrar_dados, tirando_tabela, tirando_todas_as_tabelas, executar_SQL
 from login import login
 from cadastro import cadastro
 import os
 import time
 
 def main():
-    # Exemplo de uso das funções CRUD
-    #crud.tirando_todas_as_tabelas()
-    #crud.criando_todas_as_tabelas()
-    #crud.inserindo_todos_os_dados_iniciais()
-    #crud.salvar_alteracoes()
+    # Exemplo de uso das funções do arquivo conexao_banco.py
+    #tirando_todas_as_tabelas()
+    #executar_SQL("CREATE TABLE IF NOT EXISTS dentistas (id INTEGER PRIMARY KEY, nome TEXT, email TEXT, senha TEXT, especialidade TEXT, telefone TEXT, endereco TEXT, cidade TEXT, estado TEXT)")
+    #salvar_alteracoes()
     
     # PARTE 01: LOGIN/CADASTRO NO SISTEMA:
 
