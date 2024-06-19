@@ -46,6 +46,27 @@
 --     WHERE PacienteID = NEW.PacienteID;
 -- END;
 
+-- OU
+
+-- CREATE TRIGGER trg_AfterInsertConsulta_UpdateAgenda
+-- ON Consultas
+-- AFTER INSERT
+-- AS
+-- BEGIN
+-- -- Declaração de variáveis
+-- DECLARE @DentistaID INT, @datahora DATETIME;
+
+-- -- Selecionar os dados da nova consulta inserida
+-- SELECT @DentistaID = i.DentistaID, 
+--        @DataHora = i.DataHora
+-- FROM Inserted i;
+
+-- -- Atualizar a disponibilidade do dentista para FALSE
+-- UPDATE Agendas
+-- SET Disponivel = 0
+-- WHERE DentistaID = @DentistaID AND DataHora = @DataHora;
+-- END;
+
 
 
 
