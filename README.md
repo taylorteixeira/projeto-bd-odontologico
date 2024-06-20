@@ -1,14 +1,21 @@
 # 🦷 Projeto Banco de Dados - Clínica Odontológica
 Esse projeto (Em desenvolvimento) faz parte de uma ABP da disciplina de Banco de Dados II. O projeto consiste em um sistema de banco de dados que gerencia e trata ações ocorridas em uma clínica odontológica. O projeto é desenvolvido em python através da ferramenta 'pyodbc' para poder gerenciar localmente um SGBD externo, fazendo conexão com o banco e usando conceitos SQL desenvolvidos em aula.
+Grupo E.
 
 ## 🎯 Objetivos:
 O Projeto tem como objetivo desenvolver uma plataforma adequada para tratamento de dados de uma clínica odontológica, trazendo segurança e rapidez em suas consultas.
 
 ## 🔧 Intalação:
 1. Clone esse repositório com `git clone` ou baixe o código-fonte.
+2. Em seu terminal, digite: `pip install pyodbc`
 
 ## 🚀 Execução:
-Abra o arquivo scriptCRUD.py em seu VSCODE e clique em ``run``.
+Abra o arquivo `main.py` em seu VSCODE e clique em ``run``.
+
+## ⚒️ Tecnologias e Ferramentas:
+- SQL
+- Python
+- Pyodbc (Biblioteca Python para integração de back-end com SQL externo)
 
 ## 👷🏽 Desenvolvedores:
 
