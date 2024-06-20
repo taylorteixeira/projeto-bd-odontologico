@@ -1,0 +1,81 @@
+----------------- Procedures para interação da tabela consultas 
+
+CREATE PROCEDURE ExcluirConsulta
+    @ConsultaID INT
+AS
+BEGIN
+    DELETE FROM Consultas
+    WHERE ConsultaID = @ConsultaID;
+END;
+
+-- Procedimento para inserir uma nova consulta utilizando nome do paciente e dentista
+
+CREATE PROCEDURE InserirConsulta
+    @NomePaciente VARCHAR(100),
+    @NomeDentista VARCHAR(100),
+    @DataHora DATETIME,
+    @Motivo VARCHAR(255)
+AS
+BEGIN
+    DECLARE @PacienteID INT;
+    DECLARE @DentistaID INT;
+
+    -- Obter PacienteID pelo Nome do Paciente
+    SELECT @PacienteID = PacienteID
+    FROM Pacientes
+    WHERE Nome = @NomePaciente;
+
+    -- Obter DentistaID pelo Nome do Dentista
+    SELECT @DentistaID = DentistaID
+    FROM Dentistas
+    WHERE Nome = @NomeDentista;
+
+    -- Inserir a consulta com os IDs obtidos
+    INSERT INTO Consultas (PacienteID, DentistaID, DataHora, Motivo)
+    VALUES (@PacienteID, @DentistaID, @DataHora, @Motivo);
+
+    -- Retornar os dados da consulta recém-inserida com nomes
+    SELECT *
+    FROM ConsultasComNomes()
+    WHERE ConsultaID = SCOPE_IDENTITY(); -- SCOPE_IDENTITY() retorna o ID da consulta inserida
+END;
+----------------------------
+
+EXEC InserirConsulta
+    @NomePaciente = 'João da Silva',
+    @NomeDentista = 'Dr. José Oliveira',
+    @DataHora = '2024-06-20 09:00:00',
+    @Motivo = 'Consulta de rotina';
+
+----------------------------
+
+
+-- Função de tabela para consultar consultas com nomes de paciente e dentista
+
+CREATE FUNCTION ConsultasComNomes()
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT 
+        C.ConsultaID,
+        C.PacienteID,
+        P.Nome AS NomePaciente,
+        C.DentistaID,
+        D.Nome AS NomeDentista,
+        C.DataHora,
+        C.Motivo
+    FROM Consultas C
+    INNER JOIN Pacientes P ON C.PacienteID = P.PacienteID
+    INNER JOIN Dentistas D ON C.DentistaID = D.DentistaID
+);
+
+
+-- Criar índice não clusterizado para suportar consulta com nomes
+
+CREATE NONCLUSTERED INDEX IX_Consultas_ComNomes
+ON Consultas (PacienteID, DentistaID, DataHora)
+INCLUDE (Motivo);
+
+
+
