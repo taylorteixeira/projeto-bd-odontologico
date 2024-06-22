@@ -67,6 +67,27 @@
 -- WHERE DentistaID = @DentistaID AND DataHora = @DataHora;
 -- END;
 
+-- Criação de um trigger para a tabela Consultas que automaticamente insere um registro na tabela Agendas quando uma nova consulta é marcada
+CREATE TRIGGER trg_AfterInsertConsultas
+ON Consultas
+AFTER INSERT
+AS
+BEGIN
+    DECLARE @PacienteID INT, @DentistaID INT, @DataHora DATETIME;
+    
+    SELECT @PacienteID = i.PacienteID, @DentistaID = i.DentistaID, @DataHora = i.DataHora
+    FROM inserted i;
+    
+    INSERT INTO Agendas (PacienteID, DentistaID, DataHoraInicio, DataHoraFim, Disponivel)
+    VALUES (@PacienteID, @DentistaID, @DataHora, DATEADD(MINUTE, 30, @DataHora), 0);
+END;
+GO
+
+SELECT * FROM Agendas
+SELECT * FROM Consultas
+
+INSERT INTO Consultas (PacienteID, DentistaID, DataHora, Motivo) VALUES
+(5, 1, '2024-07-12 09:00:00', 'Teste')
 
 
 
