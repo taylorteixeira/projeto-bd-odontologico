@@ -1,24 +1,22 @@
---CREATE TABLESSS
+DROP TABLE IF EXISTS Pacientes;
+DROP TABLE IF EXISTS Dentistas;
+DROP TABLE IF EXISTS Consultas;
+DROP TABLE IF EXISTS Tratamentos;
+DROP TABLE IF EXISTS Prontuarios;
+DROP TABLE IF EXISTS Pagamentos;
+DROP TABLE IF EXISTS Agendas;
+DROP TABLE IF EXISTS Receitas;
+GO
 
-DROP TABLE Pacientes
-DROP TABLE Dentistas
-DROP TABLE Consultas
-DROP TABLE Tratamentos
-DROP TABLE Prontuarios
-DROP TABLE Pagamentos
-DROP TABLE Agendas
-DROP TABLE Receitas
-go
-
-SELECT * FROM Pacientes
-SELECT * FROM Dentistas
-SELECT * FROM Consultas
-SELECT * FROM Tratamentos
-SELECT * FROM Prontuarios
-SELECT * FROM Pagamentos
-SELECT * FROM Agendas
-SELECT * FROM Receitas
-go
+SELECT * FROM Pacientes;
+SELECT * FROM Dentistas;
+SELECT * FROM Consultas;
+SELECT * FROM Tratamentos;
+SELECT * FROM Prontuarios;
+SELECT * FROM Pagamentos;
+SELECT * FROM Agendas;
+SELECT * FROM Receitas;
+GO
 
 CREATE TABLE Pacientes (
     PacienteID INT IDENTITY PRIMARY KEY,
@@ -29,6 +27,7 @@ CREATE TABLE Pacientes (
     Telefone VARCHAR(15),
     Email VARCHAR(100)
 );
+GO
 
 CREATE TABLE Dentistas (
     DentistaID INT IDENTITY PRIMARY KEY,
@@ -38,6 +37,7 @@ CREATE TABLE Dentistas (
     Telefone VARCHAR(15),
     Email VARCHAR(100)
 );
+GO
 
 CREATE TABLE Consultas (
     ConsultaID INT IDENTITY PRIMARY KEY,
@@ -48,12 +48,14 @@ CREATE TABLE Consultas (
     FOREIGN KEY (PacienteID) REFERENCES Pacientes(PacienteID),
     FOREIGN KEY (DentistaID) REFERENCES Dentistas(DentistaID)
 );
+GO
 
 CREATE TABLE Tratamentos (
     TratamentoID INT IDENTITY PRIMARY KEY,
     Descricao VARCHAR(255) NOT NULL,
     Custo DECIMAL(10, 2)
 );
+GO
 
 CREATE TABLE Prontuarios (
     ProntuarioID INT IDENTITY PRIMARY KEY,
@@ -67,6 +69,7 @@ CREATE TABLE Prontuarios (
     FOREIGN KEY (DentistaID) REFERENCES Dentistas(DentistaID),
     FOREIGN KEY (TratamentoID) REFERENCES Tratamentos(TratamentoID)
 );
+GO
 
 CREATE TABLE Pagamentos (
     PagamentoID INT IDENTITY PRIMARY KEY,
@@ -76,14 +79,19 @@ CREATE TABLE Pagamentos (
     MetodoPagamento VARCHAR(50),
     FOREIGN KEY (PacienteID) REFERENCES Pacientes(PacienteID)
 );
+GO
 
 CREATE TABLE Agendas (
     AgendaID INT IDENTITY PRIMARY KEY,
+    PacienteID INT,
     DentistaID INT,
-    DataHora DATETIME NOT NULL,
-    Disponivel bit NOT NULL,
-    FOREIGN KEY (DentistaID) REFERENCES Dentistas(DentistaID)
+    DataHoraInicio DATETIME NOT NULL,
+    DataHoraFim DATETIME NOT NULL,
+    Disponivel BIT NOT NULL,
+    FOREIGN KEY (DentistaID) REFERENCES Dentistas(DentistaID),
+    FOREIGN KEY (PacienteID) REFERENCES Pacientes(PacienteID)
 );
+GO
 
 CREATE TABLE Receitas (
     ReceitaID INT IDENTITY PRIMARY KEY,
@@ -93,3 +101,4 @@ CREATE TABLE Receitas (
     Descricao VARCHAR(255),
     FOREIGN KEY (PacienteID) REFERENCES Pacientes(PacienteID)
 );
+GO
