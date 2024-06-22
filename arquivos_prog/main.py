@@ -1,123 +1,112 @@
-from conexao_banco import salvar_alteracoes, mostrar_dados, tirando_tabela, tirando_todas_as_tabelas, executar_SQL
+from conexao_banco import get_connection, salvar_alteracoes, mostrar_dados, tirando_tabela, tirando_todas_as_tabelas, executar_SQL
 from conexao_banco import add_agendas, remover_agendas, mostrar_agendas, mudar_agendas
 import os
 import time
+import pyodbc
 
 def main():
-    # Exemplo de uso das funções do arquivo conexao_banco.py
-    #tirando_todas_as_tabelas()
-    #executar_SQL("CREATE TABLE IF NOT EXISTS dentistas (id INTEGER PRIMARY KEY, nome TEXT, email TEXT, senha TEXT, especialidade TEXT, telefone TEXT, endereco TEXT, cidade TEXT, estado TEXT)")
-    #salvar_alteracoes()
-    os.system("cls")
-    time.sleep(2)
-    print("Bem-vindo ao sistema!\n")
-    time.sleep(2)
-    os.system("cls")
+    # Conectar com o banco de dados
+    connection = get_connection()
 
-    # PARTE 01: MENU PRINCIPAL DO SISTEMA:
+    try:
+        os.system("cls")
+        time.sleep(2)
+        print("Bem-vindo ao sistema!\n")
+        time.sleep(2)
+        os.system("cls")
 
-    while True:
-        #Sistema aqui 
-        print("Escolha uma das opções abaixo:\n1-Adicionar Agendamento\n2-Remover Agendamento\n3-Listar Agendamentos\n4-Mudar Agendamento\n5-Sair do Sistema\n")  
-        escolha = int(input("Digite o número da opção desejada: "))
+        while True:
+            print("Escolha uma das opções abaixo:\n1-Adicionar Agendamento\n2-Remover Agendamento\n3-Listar Agendamentos\n4-Mudar Agendamento\n5-Sair do Sistema\n")
+            escolha = int(input("Digite o número da opção desejada: "))
 
-        match escolha:
-            case 1:
-                os.system("cls")
-                print("1-Adicionar Agendamento")
-                
-                paciente_id = int(input("Digite o codigo do paciente: "))
-                dentista_id =  int(input("Digite o codigo do dentista: "))
-                data_hora_inicio = input("Digite a data de inicio da consulta (yyyy-MM-dd HH:mm:ss): ")
-                data_hora_fim = input("Digite a data de final da consulta (yyyy-MM-dd HH:mm:ss): ")
-                disponivel = int(input("Digite (1) para agendamento disponivel e (2) para agendamento indisponivel: "))
-                
-                add_agendas(paciente_id, dentista_id, data_hora_inicio, data_hora_fim, disponivel)
-                time.sleep(2)
-                os.system("cls")
+            match escolha:
+                case 1:
+                    os.system("cls")
+                    print("1-Adicionar Agendamento")
+                    
+                    paciente_id = int(input("Digite o código do paciente: "))
+                    dentista_id = int(input("Digite o código do dentista: "))
+                    data_hora_inicio = input("Digite a data de início da consulta (yyyy-MM-dd HH:mm:ss): ")
+                    data_hora_fim = input("Digite a data de final da consulta (yyyy-MM-dd HH:mm:ss): ")
+                    disponivel = int(input("Digite (1) para agendamento disponível e (2) para agendamento indisponível: "))
+                    
+                    add_agendas(connection, paciente_id, dentista_id, data_hora_inicio, data_hora_fim, disponivel)
+                    time.sleep(2)
+                    os.system("cls")
 
-            case 2:
-                os.system("cls")
-                print("2-Remover Agendamento")
-                
-                agenda_id = int(input("Digite o codigo do agendamento para remover: "))
-                
-                remover_agendas(agenda_id)
-                time.sleep(2)
-                os.system("cls")
+                case 2:
+                    os.system("cls")
+                    print("2-Remover Agendamento")
+                    
+                    agenda_id = int(input("Digite o código do agendamento para remover: "))
+                    
+                    remover_agendas(connection, agenda_id)
+                    time.sleep(2)
+                    os.system("cls")
 
+                case 3:
+                    os.system("cls")
+                    print("3-Listar Agendamentos")
+                    mostrar_agendas(connection)
+                    input("Pressione qualquer tecla para continuar...")
+                    os.system("cls")
 
-            case 3:
-                os.system("cls")
-                print("3-Listar Agendamentos")
+                case 4:
+                    os.system("cls")
+                    print("4-Mudar Agendamento")
 
-                mostrar_agendas()
-                input("Pressione qualquer tecla para continuar...")
-                os.system("cls")
+                    agenda_id = int(input("Digite o código da agenda que você deseja alterar: "))
+                    
+                    mudarPaciente = int(input("Você deseja alterar o paciente? (1) Sim e (2) Não: "))
+                    if mudarPaciente == 1:
+                        paciente_id = int(input("Digite o código do paciente que você deseja alterar: "))
+                    else:
+                        paciente_id = None
 
-            case 4:
-                os.system("cls")
-                print("4-Mudar Agendamento")
+                    mudarDentista = int(input("Você deseja alterar o dentista? (1) Sim e (2) Não: "))
+                    if mudarDentista == 1:
+                        dentista_id = int(input("Digite o código do dentista que você deseja alterar: "))
+                    else:
+                        dentista_id = None
 
-                agenda_id = int(input("Digite o codigo da agenda que você deseja alterar: "))
-                
-                mudarPaciente = int(print("Você deseja alterar o paciente? (1) Sim e (2)Não: "))
-                match mudarPaciente:
-                    case 1:
-                        paciente_id = int(input("Digite o codigo do paciente que você deseja alterar: "))
-                    case 2:
-                        pass
-                    case _:
-                        print("opção Invalida")
+                    mudarInicio = int(input("Você deseja alterar a data de início? (1) Sim e (2) Não: "))
+                    if mudarInicio == 1:
+                        data_hora_inicio = input("Digite a data de início da consulta (yyyy-MM-dd HH:mm:ss): ")
+                    else:
+                        data_hora_inicio = None
 
-                mudarDentista = int(print("Você deseja alterar o paciente? (1) Sim e (2)Não: "))
-                match mudarDentista:
-                    case 1:
-                        dentista_id =  int(input("Digite o codigo do dentista que você deseja alterar: "))
-                    case 2:
-                        pass
-                    case _:
-                        print("opção Invalida")
-                
-                mudarInicio = int(print("Você deseja alterar o paciente? (1) Sim e (2)Não: "))
-                match mudarInicio:
-                    case 1:
-                        data_hora_inicio = input("Digite a data de inicio da consulta (yyyy-MM-dd HH:mm:ss) que você deseja alterar:  ")
-                    case 2:
-                        pass
-                    case _:
-                        print("opção Invalida")
-                
-                mudarFim = int(print("Você deseja alterar o paciente? (1) Sim e (2)Não: "))                
-                match mudarFim:
-                    case 1:
-                        data_hora_fim = input("Digite a data de final da consulta (yyyy-MM-dd HH:mm:ss) que você deseja alterar:  ")
-                    case 2:
-                        pass
-                    case _:
-                        print("opção Invalida")                
-                
-                mudarDisponibilidade = int(print("Você deseja alterar o paciente? (1) Sim e (2)Não: "))
-                match mudarDisponibilidade:
-                    case 1:
-                        disponivel = int(input("Digite a disponibilidade para qual você deseja alterar: "))
-                    case 2:
-                        pass
-                    case _:
-                        print("opção Invalida")
-                
-            case 5:
-                os.system("cls")
-                print("Saindo do sistema...")
-                time.sleep(2)
-                break
+                    mudarFim = int(input("Você deseja alterar a data de fim? (1) Sim e (2) Não: "))
+                    if mudarFim == 1:
+                        data_hora_fim = input("Digite a data de fim da consulta (yyyy-MM-dd HH:mm:ss): ")
+                    else:
+                        data_hora_fim = None
 
-            case _:
-                os.system("cls")
-                print("Opção inválida! Tente novamente.")
-                time.sleep(2)
-                os.system("clear")
-                continue
-        
+                    mudarDisponibilidade = int(input("Você deseja alterar a disponibilidade? (1) Sim e (2) Não: "))
+                    if mudarDisponibilidade == 1:
+                        disponivel = int(input("Digite a nova disponibilidade: "))
+                    else:
+                        disponivel = None
+                    
+                    mudar_agendas(connection, agenda_id, paciente_id, dentista_id, data_hora_inicio, data_hora_fim, disponivel)
+
+                case 5:
+                    os.system("cls")
+                    print("Saindo do sistema...")
+                    time.sleep(2)
+                    break
+
+                case _:
+                    os.system("cls")
+                    print("Opção inválida! Tente novamente.")
+                    time.sleep(2)
+                    os.system("cls")
+
+    except pyodbc.Error as e:
+        print("Erro: ", e)
+
+    finally:
+        if connection:
+            connection.close()
+
 if __name__ == "__main__":
     main()
