@@ -94,3 +94,52 @@ BEGIN
     WHERE ConsultaID = SCOPE_IDENTITY(); -- SCOPE_IDENTITY() retorna o ID da consulta inserida
 END;
 
+---- nova proc para atender o tratamento
+CREATE PROCEDURE AgendarConsulta (
+    @NomePaciente NVARCHAR(100),
+    @NomeDentista NVARCHAR(100),
+    @DataConsulta DATETIME,
+    @Tratamento NVARCHAR(100)
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @PacienteID INT, @DentistaID INT, @TratamentoID INT;
+
+    -- Função para obter o ID do paciente pelo nome
+    CREATE FUNCTION dbo.GetPacienteID (@Nome NVARCHAR(100))
+    RETURNS INT
+    AS
+    BEGIN
+        DECLARE @ID INT;
+        SELECT @ID = PacienteID FROM Pacientes WHERE Nome = @Nome;
+        RETURN @ID;
+    END;
+
+    -- Função para obter o ID do dentista pelo nome
+    CREATE FUNCTION dbo.GetDentistaID (@Nome NVARCHAR(100))
+    RETURNS INT
+    AS
+    BEGIN
+        DECLARE @ID INT;
+        SELECT @ID = DentistaID FROM Dentistas WHERE Nome = @Nome;
+        RETURN @ID;
+    END;
+
+    -- Obter IDs de paciente e dentista
+    SET @PacienteID = dbo.GetPacienteID(@NomePaciente);
+    SET @DentistaID = dbo.GetDentistaID(@NomeDentista);
+
+    -- Obter ID do tratamento
+    SELECT @TratamentoID = TratamentoID FROM Tratamentos WHERE Descricao = @Tratamento;
+
+    -- Inserir na tabela de Consultas
+    INSERT INTO Consultas (PacienteID, DentistaID, DataHora, Descricao)
+    VALUES (@PacienteID, @DentistaID, @DataConsulta, @Tratamento);
+
+    -- Exibir mensagem de sucesso
+    PRINT 'Consulta agendada com sucesso.';
+END;
+
+
