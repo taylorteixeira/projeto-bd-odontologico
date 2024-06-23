@@ -1,23 +1,3 @@
-DROP TABLE IF EXISTS Pacientes;
-DROP TABLE IF EXISTS Dentistas;
-DROP TABLE IF EXISTS Consultas;
-DROP TABLE IF EXISTS Tratamentos;
-DROP TABLE IF EXISTS Prontuarios;
-DROP TABLE IF EXISTS Pagamentos;
-DROP TABLE IF EXISTS Agendas;
-DROP TABLE IF EXISTS Receitas;
-GO
-
-SELECT * FROM Pacientes;
-SELECT * FROM Dentistas;
-SELECT * FROM Consultas;
-SELECT * FROM Tratamentos;
-SELECT * FROM Prontuarios;
-SELECT * FROM Pagamentos;
-SELECT * FROM Agendas;
-SELECT * FROM Receitas;
-GO
-
 -- Criação das tabelas
 CREATE TABLE Pacientes (
     PacienteID INT IDENTITY PRIMARY KEY,
