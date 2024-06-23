@@ -142,4 +142,35 @@ BEGIN
     PRINT 'Consulta agendada com sucesso.';
 END;
 
+------------------
+-- Primeiro, criamos a trigger
+CREATE TRIGGER trg_ApósInserirConsulta
+ON Consultas
+AFTER INSERT
+AS
+BEGIN
+    DECLARE @ConsultaID INT, @DataInicio DATETIME, @DuracaoMinutos INT;
+
+    -- Obtém o ID da consulta inserida
+    SELECT @ConsultaID = inserted.ConsultaID
+    FROM inserted;
+
+    -- Obtém a data e a duração do tratamento da consulta inserida
+    SELECT @DataInicio = c.DataHora,
+           @DuracaoMinutos = t.DuracaoEmMinutos
+    FROM inserted i
+    INNER JOIN Consultas c ON i.ConsultaID = c.ConsultaID
+    INNER JOIN Tratamentos t ON c.Descricao = t.Descricao;
+
+    -- Calcula a data final baseada na duração do tratamento
+    DECLARE @DataFim DATETIME;
+    SET @DataFim = DATEADD(MINUTE, @DuracaoMinutos, @DataInicio);
+
+    -- Insere na tabela de Agendas
+    INSERT INTO Agendas (PacienteID, DentistaID, DataHoraInicio, DataHoraFim, Disponivel)
+    SELECT c.PacienteID, c.DentistaID, @DataInicio, @DataFim, 0
+    FROM Consultas c
+    WHERE c.ConsultaID = @ConsultaID;
+
+END;
 
