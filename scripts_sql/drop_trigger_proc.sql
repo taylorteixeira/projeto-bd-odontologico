@@ -1,15 +1,27 @@
 -- FUNCION:
+CREATE FUNCTION VerificarConflitoHorario (@DentistaID INT, @DataHoraInicio DATETIME, @DataHoraFim DATETIME)
+RETURNS BIT
+AS
+BEGIN
+DECLARE @ExisteConflito BIT;
 
+IF EXISTS (
+    SELECT 1
+    FROM Agendas
+    WHERE DentistaID = @DentistaID
+    AND DataHoraInicio < @DataHoraFim
+    AND DataHoraFim > @DataHoraInicio
+    AND Disponivel = 0  -- Considera apenas tratamentos marcados (não disponíveis)
+)
+BEGIN
+    SET @ExisteConflito = 1;  -- Há conflito de horário
+END
+ELSE
+BEGIN
+    SET @ExisteConflito = 0;  -- Não há conflito de horário
+END
 
-
-
-
-
-
-
-
-
-
+RETURN @ExisteConflito;
 
 
 
