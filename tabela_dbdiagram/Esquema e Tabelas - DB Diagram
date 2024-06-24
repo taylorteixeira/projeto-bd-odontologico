@@ -32,13 +32,14 @@ Table Tratamentos {
   TratamentoID INT [pk, increment]
   Descricao VARCHAR(255) [not null]
   Custo DECIMAL(10, 2)
+  DuracaoMinutos INT
 }
 
 Table Prontuarios {
   ProntuarioID INT [pk, increment]
   PacienteID INT [ref: > Pacientes.PacienteID]
   DentistaID INT [ref: > Dentistas.DentistaID]
-  Data DATETIME
+  Data DATETIME [not null]
   Diagnostico VARCHAR(255)
   TratamentoID INT [ref: > Tratamentos.TratamentoID]
   Observacoes TEXT 
@@ -48,21 +49,24 @@ Table Pagamentos {
   PagamentoID INT [pk, increment]
   PacienteID INT [ref: > Pacientes.PacienteID]
   Valor DECIMAL(10, 2) [not null]
-  DataPagamento VARCHAR(50) [not null]
+  DataPagamento DATE [not null]
   MetodoPagamento VARCHAR(50)
 }
 
 Table Agendas {
   AgendaID INT [pk, increment]
+  PacienteID INT [ref: > Pacientes.PacienteID]
   DentistaID INT [ref: > Dentistas.DentistaID]
-  DataHora DATETIME
-  Disponivel BIT 
+  DataHoraInicio DATETIME [not null]
+  DataHoraFim DATETIME [not null]
+  Disponivel BIT [not null]
 }
 
 Table Receitas {
   ReceitaID INT [pk, increment]
   PacienteID INT [ref: > Pacientes.PacienteID]
   Valor DECIMAL(10, 2) [not null]
-  DataReceita DATETIME [not null]
+  DataReceita DATE [not null]
   Descricao VARCHAR(255)
 }
+

@@ -1,4 +1,3 @@
--- Criação das tabelas
 CREATE TABLE Pacientes (
     PacienteID INT IDENTITY PRIMARY KEY,
     Nome VARCHAR(100) NOT NULL,
@@ -32,10 +31,10 @@ CREATE TABLE Consultas (
 GO
 
 CREATE TABLE Tratamentos (
-TratamentoID INT IDENTITY PRIMARY KEY,
-Descricao VARCHAR(255) NOT NULL,
-Custo DECIMAL(10, 2),
-DuracaoMinutos INT -- Adicionando coluna para tempo de duração do tratamento em minutos
+    TratamentoID INT IDENTITY PRIMARY KEY,
+    Descricao VARCHAR(255) NOT NULL,
+    Custo DECIMAL(10, 2),
+    DuracaoMinutos INT -- Adicionando coluna para tempo de duração do tratamento em minutos
 );
 GO
 

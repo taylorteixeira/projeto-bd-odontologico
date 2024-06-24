@@ -9,8 +9,6 @@ DROP TABLE IF EXISTS Agendas;
 DROP TABLE IF EXISTS Receitas;
 GO
 
-
--- Verificando se as tabelas foram removidas
 SELECT * FROM Pacientes;
 SELECT * FROM Dentistas;
 SELECT * FROM Consultas;
@@ -19,4 +17,12 @@ SELECT * FROM Prontuarios;
 SELECT * FROM Pagamentos;
 SELECT * FROM Agendas;
 SELECT * FROM Receitas;
+GO
+
+DROP FUNCTION FormatarDataHoraBrasileira;
+DROP TRIGGER trg_AfterInsertConsultas;
+DROP PROCEDURE ExcluirConsulta;
+DROP PROCEDURE InserirConsulta;
+DROP PROCEDURE AgendarConsulta;
+DROP TRIGGER trg_AposInserirConsulta
 GO
