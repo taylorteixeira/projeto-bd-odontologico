@@ -5,8 +5,8 @@ connection_string = (
     "DRIVER={ODBC Driver 17 for SQL Server};"
     "SERVER=localhost,1433;" #Verificar se a porta é essa
     "DATABASE=odontodb;"
-    "UID=sa;" #Verificar o nome do banco
-    "PWD=Passw0rd;"  # Substitua pela sua senha do banco
+    "UID=SA;" #Verificar o nome do banco
+    "PWD=reallyStrongPwd123;"  # Substitua pela sua senha do banco
     "Encrypt=yes;"
     "TrustServerCertificate=yes;"
 )

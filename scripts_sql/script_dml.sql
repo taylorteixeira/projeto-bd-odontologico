@@ -1,4 +1,4 @@
--- Inserção de dados nas tabelas
+-- Inserção de dados na tabela Pacientes
 INSERT INTO Pacientes (Nome, DataNascimento, Sexo, Endereco, Telefone, Email) VALUES
 ('João Silva', '1985-06-15', 'M', 'Rua das Flores, 123', '11987654321', 'joao.silva@gmail.com'),
 ('Maria Oliveira', '1990-04-25', 'F', 'Av. Paulista, 456', '11976543210', 'maria.oliveira@gmail.com'),
@@ -12,6 +12,7 @@ INSERT INTO Pacientes (Nome, DataNascimento, Sexo, Endereco, Telefone, Email) VA
 ('Juliana Freitas', '1991-11-19', 'F', 'Rua das Rosas, 999', '11998765432', 'juliana.freitas@gmail.com');
 GO
 
+-- Inserção de dados na tabela Dentistas
 INSERT INTO Dentistas (Nome, CRO, Especialidade, Telefone, Email) VALUES
 ('Dr. Fernando Almeida', 'SP12345', 'Ortodontia', '11987654322', 'fernando.almeida@clinica.com'),
 ('Dra. Paula Souza', 'SP54321', 'Endodontia', '11987654323', 'paula.souza@clinica.com'),
@@ -23,6 +24,7 @@ INSERT INTO Dentistas (Nome, CRO, Especialidade, Telefone, Email) VALUES
 ('Dra. Sofia Costa', 'SP86420', 'Patologia Bucal', '11987654329', 'sofia.costa@clinica.com');
 GO
 
+-- Inserção de dados na tabela Consultas
 INSERT INTO Consultas (PacienteID, DentistaID, DataHora, Motivo) VALUES
 (1, 1, '2024-06-12 09:00:00', 'Consulta de rotina'),
 (2, 2, '2024-06-12 10:00:00', 'Dor de dente'),
@@ -36,6 +38,7 @@ INSERT INTO Consultas (PacienteID, DentistaID, DataHora, Motivo) VALUES
 (10, 2, '2024-06-14 10:00:00', 'Dor de dente');
 GO
 
+-- Inserção de dados na tabela Tratamentos
 INSERT INTO Tratamentos (Descricao, Custo, DuracaoMinutos) VALUES
 ('Limpeza Dentária', 200.00, 30),
 ('Canal Radicular', 800.00, 60),
@@ -49,10 +52,11 @@ INSERT INTO Tratamentos (Descricao, Custo, DuracaoMinutos) VALUES
 ('Odontopediatria (Consulta)', 150.00, 180);
 GO
 
+-- Inserção de dados na tabela Prontuarios
 INSERT INTO Prontuarios (PacienteID, DentistaID, Data, Diagnostico, TratamentoID, Observacoes) VALUES
 (1, 1, '2024-06-12 09:00:00', 'Boa saúde bucal', 1, 'Paciente em boas condições.'),
 (2, 2, '2024-06-12 10:00:00', 'Cárie dentária', 2, 'Recomendada realização de canal.'),
-(3, 3, '2024-06-12 11:00:00', 'Gengivite', 3, 'Necessária extração de dente.'),
+(3, 3, '2024-06-12 11:00:00', 'Gengivite', 8, 'Tratamento necessário para gengivite.'),
 (4, 4, '2024-06-12 14:00:00', 'Boa saúde bucal', 1, 'Paciente em boas condições.'),
 (5, 5, '2024-06-12 15:00:00', 'Perda de dente', 5, 'Recomendada colocação de implante.'),
 (6, 6, '2024-06-13 09:30:00', 'Dente quebrado', 6, 'Necessária colocação de prótese.'),
@@ -62,6 +66,7 @@ INSERT INTO Prontuarios (PacienteID, DentistaID, Data, Diagnostico, TratamentoID
 (10, 2, '2024-06-14 10:00:00', 'Cárie dentária', 2, 'Recomendada realização de canal.');
 GO
 
+-- Inserção de dados na tabela Pagamentos
 INSERT INTO Pagamentos (PacienteID, Valor, DataPagamento, MetodoPagamento) VALUES
 (1, 200.00, '2024-06-12', 'Cartão de Crédito'),
 (2, 800.00, '2024-06-12', 'Dinheiro'),
@@ -75,6 +80,7 @@ INSERT INTO Pagamentos (PacienteID, Valor, DataPagamento, MetodoPagamento) VALUE
 (10, 800.00, '2024-06-14', 'Dinheiro');
 GO
 
+-- Inserção de dados na tabela Agendas
 INSERT INTO Agendas (PacienteID, DentistaID, DataHoraInicio, DataHoraFim, Disponivel) VALUES
 (1, 1, '2024-06-12 09:00:00', '2024-06-12 09:30:00', 0),
 (2, 2, '2024-06-12 10:00:00', '2024-06-12 10:30:00', 0),
@@ -88,6 +94,7 @@ INSERT INTO Agendas (PacienteID, DentistaID, DataHoraInicio, DataHoraFim, Dispon
 (10, 2, '2024-06-14 10:00:00', '2024-06-14 10:30:00', 0);
 GO
 
+-- Inserção de dados na tabela Receitas
 INSERT INTO Receitas (PacienteID, Valor, DataReceita, Descricao) VALUES
 (1, 100.00, '2024-06-12', 'Consulta de rotina'),
 (2, 150.00, '2024-06-12', 'Canal Radicular'),
