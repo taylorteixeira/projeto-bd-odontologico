@@ -34,7 +34,7 @@ CREATE TABLE Tratamentos (
     TratamentoID INT IDENTITY PRIMARY KEY,
     Descricao VARCHAR(255) NOT NULL,
     Custo DECIMAL(10, 2),
-    DuracaoMinutos INT -- Adicionando coluna para tempo de duração do tratamento em minutos
+    DuracaoMinutos INT, -- Adicionando coluna para tempo de duração do tratamento em minutos
 );
 GO
 

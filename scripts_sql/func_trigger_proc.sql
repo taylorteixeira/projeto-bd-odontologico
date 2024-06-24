@@ -19,11 +19,23 @@ BEGIN
 END;
 GO
 
---DECLARE @datahora DATETIME = '2024-06-24 15:30:00';
---SELECT dbo.FormatarDataHoraBrasileira(@datahora) AS DataHoraFormatada;
+-- Trigger para inserir automaticamente na tabela Agendas
+CREATE TRIGGER trg_AfterInsertConsultas
+ON Consultas
+AFTER INSERT
+AS
+BEGIN
+    DECLARE @PacienteID INT, @DentistaID INT, @DataHora DATETIME;
+    
+    SELECT @PacienteID = i.PacienteID, @DentistaID = i.DentistaID, @DataHora = i.DataHora
+    FROM inserted i;
+    
+    INSERT INTO Agendas (PacienteID, DentistaID, DataHoraInicio, DataHoraFim, Disponivel)
+    VALUES (@PacienteID, @DentistaID, @DataHora, DATEADD(MINUTE, 30, @DataHora), 0);
+END;
+GO
 
--------------------------------------------------------------------------------------------------------
-
+-- Procedimento armazenado para excluir consulta
 CREATE PROCEDURE ExcluirConsulta
     @ConsultaID INT
 AS
@@ -32,18 +44,6 @@ BEGIN
     WHERE ConsultaID = @ConsultaID;
 END;
 GO
-
---INSERT INTO Consultas (PacienteID, DentistaID, DataHora, Motivo)
---VALUES (1, 1, '2024-06-24 15:30:00', 'Consulta de teste');
-
---SELECT * FROM Consultas WHERE PacienteID = 1 AND DentistaID = 1 AND DataHora = '2024-06-24 15:30:00';
-
---EXEC ExcluirConsulta @ConsultaID = (SELECT ConsultaID FROM Consultas WHERE PacienteID = 1 AND DentistaID = 1 AND DataHora = '2024-06-24 15:30:00');
-
---SELECT * FROM Consultas WHERE PacienteID = 1 AND DentistaID = 1 AND DataHora = '2024-06-24 15:30:00';
-
-
--------------------------------------------------------------------------------------------------------
 
 CREATE FUNCTION ConsultasComNomes()
 RETURNS TABLE
@@ -63,9 +63,6 @@ RETURN
     INNER JOIN Dentistas D ON C.DentistaID = D.DentistaID
 );
 GO
-
---SELECT * FROM dbo.ConsultasComNomes();
--------------------------------------------------------------------------------------------------------
 
 CREATE PROCEDURE InserirConsulta
     @NomePaciente VARCHAR(100),
@@ -87,65 +84,63 @@ BEGIN
     FROM Dentistas
     WHERE Nome = @NomeDentista;
 
-    -- Inserir a consulta
+    -- Inserir a consulta com os IDs obtidos
     INSERT INTO Consultas (PacienteID, DentistaID, DataHora, Motivo)
     VALUES (@PacienteID, @DentistaID, @DataHora, @Motivo);
+
+    -- Retornar os dados da consulta recém-inserida com nomes
+    SELECT *
+    FROM ConsultasComNomes()
+    WHERE ConsultaID = SCOPE_IDENTITY(); -- SCOPE_IDENTITY() retorna o ID da consulta inserida
+END;
+GO
+-- Função para obter o ID do paciente pelo nome
+CREATE FUNCTION dbo.GetPacienteID (@Nome NVARCHAR(100))
+RETURNS INT
+AS
+BEGIN
+    DECLARE @ID INT;
+    SELECT @ID = PacienteID FROM Pacientes WHERE Nome = @Nome;
+    RETURN @ID;
 END;
 GO
 
---INSERT INTO Pacientes (Nome) VALUES ('Paciente de Teste');
---INSERT INTO Dentistas (Nome) VALUES ('Dentista de Teste');
-
--- Testar o procedimento InserirConsulta
---EXEC InserirConsulta @NomePaciente = 'Paciente de Teste', 
-                    --@NomeDentista = 'Dentista de Teste', 
-                    --@DataHora = '2024-06-25 10:00:00', 
-                    --@Motivo = 'Consulta de Teste';
-
---SELECT * FROM Consultas WHERE PacienteID = (SELECT PacienteID FROM Pacientes WHERE Nome = 'Paciente de Teste')
-                        --AND DentistaID = (SELECT DentistaID FROM Dentistas WHERE Nome = 'Dentista de Teste')
-                        --AND DataHora = '2024-06-25 10:00:00';
-
--------------------------------------------------------------------------------------------------------
-
-CREATE TRIGGER tg_validar_dados
-ON Consultas
-FOR INSERT
+-- Função para obter o ID do dentista pelo nome
+CREATE FUNCTION dbo.GetDentistaID (@Nome NVARCHAR(100))
+RETURNS INT
 AS
 BEGIN
-    DECLARE @PacienteID INT;
-    DECLARE @DentistaID INT;
-    DECLARE @DataHora DATETIME;
+    DECLARE @ID INT;
+    SELECT @ID = DentistaID FROM Dentistas WHERE Nome = @Nome;
+    RETURN @ID;
+END;
+GO
 
-    SELECT @PacienteID = i.PacienteID, @DentistaID = i.DentistaID, @DataHora = i.DataHora
-    FROM inserted i;
+-- Procedure para agendar uma consulta
+CREATE PROCEDURE AgendarConsulta (
+    @NomePaciente NVARCHAR(100),
+    @NomeDentista NVARCHAR(100),
+    @DataConsulta DATETIME,
+    @Tratamento NVARCHAR(100)
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
 
-    -- Verificar se o paciente existe
-    IF NOT EXISTS (SELECT 1 FROM Pacientes WHERE PacienteID = @PacienteID)
-    BEGIN
-        RAISERROR ('Paciente não encontrado!', 16, 1);
-        ROLLBACK TRANSACTION;
-        RETURN;
-    END;
+    DECLARE @PacienteID INT, @DentistaID INT, @TratamentoID INT;
 
-    -- Verificar se o dentista existe
-    IF NOT EXISTS (SELECT 1 FROM Dentistas WHERE DentistaID = @DentistaID)
-    BEGIN
-        RAISERROR ('Dentista não encontrado!', 16, 1);
-        ROLLBACK TRANSACTION;
-        RETURN;
-    END;
+    -- Obter IDs de paciente e dentista usando as funções criadas
+    SET @PacienteID = dbo.GetPacienteID(@NomePaciente);
+    SET @DentistaID = dbo.GetDentistaID(@NomeDentista);
 
-    -- Verificar se o dentista está disponível no horário marcado
-    IF EXISTS (
-        SELECT 1 FROM Consultas
-        WHERE DentistaID = @DentistaID
-          AND DataHora = @DataHora
-    )
-    BEGIN
-        RAISERROR ('O dentista não está disponível nesse horário!', 16, 1);
-        ROLLBACK TRANSACTION;
-        RETURN;
-    END;
+    -- Obter ID do tratamento
+    SELECT @TratamentoID = TratamentoID FROM Tratamentos WHERE Descricao = @Tratamento;
+
+    -- Inserir na tabela de Consultas
+    INSERT INTO Consultas (PacienteID, DentistaID, DataHora)
+    VALUES (@PacienteID, @DentistaID, @DataConsulta);
+
+    -- Exibir mensagem de sucesso
+    PRINT 'Consulta agendada com sucesso.';
 END;
 GO
