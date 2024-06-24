@@ -61,7 +61,7 @@ def add_agendas(connection, paciente_id, dentista_id, data_hora_inicio, data_hor
     '''
     cursor.execute(query, (paciente_id, dentista_id, data_hora_inicio, data_hora_fim, disponivel))
     salvar_alteracoes(connection)
-    print("Agendamento adicionado com sucesso.")
+    print("\nAgendamento adicionado com sucesso.")
 
 # Removendo Agendas
 def remover_agendas(connection, agenda_id):
@@ -71,7 +71,7 @@ def remover_agendas(connection, agenda_id):
     '''
     cursor.execute(query, (agenda_id,))
     salvar_alteracoes(connection)
-    print("Agendamento removido com sucesso.")
+    print("\nAgendamento removido com sucesso.")
 
 # Mostrar Agendas
 def mostrar_agendas(connection):
@@ -98,4 +98,4 @@ def mudar_agendas(connection, agenda_id, paciente_id=None, dentista_id=None, dat
     '''
     cursor.execute(query, (paciente_id, dentista_id, data_hora_inicio, data_hora_fim, disponivel, agenda_id))
     salvar_alteracoes(connection)
-    print("Agendamento alterado com sucesso.")
+    print("\nAgendamento alterado com sucesso.")

@@ -22,7 +22,7 @@ def main():
             match escolha:
                 case 1:
                     os.system("cls")
-                    print("1-Adicionar Agendamento")
+                    print("1-Adicionar Agendamento\n")
                     
                     paciente_id = int(input("Digite o código do paciente: "))
                     dentista_id = int(input("Digite o código do dentista: "))
@@ -36,7 +36,7 @@ def main():
 
                 case 2:
                     os.system("cls")
-                    print("2-Remover Agendamento")
+                    print("2-Remover Agendamento\n")
                     
                     agenda_id = int(input("Digite o código do agendamento para remover: "))
                     
@@ -46,14 +46,14 @@ def main():
 
                 case 3:
                     os.system("cls")
-                    print("3-Listar Agendamentos")
+                    print("3-Listar Agendamentos:\n")
                     mostrar_agendas(connection)
-                    input("Pressione qualquer tecla para continuar...")
+                    input("\nPressione qualquer tecla para continuar...")
                     os.system("cls")
 
                 case 4:
                     os.system("cls")
-                    print("4-Mudar Agendamento")
+                    print("4-Mudar Agendamento\n")
 
                     agenda_id = int(input("Digite o código da agenda que você deseja alterar: "))
                     
@@ -63,25 +63,25 @@ def main():
                     else:
                         paciente_id = None
 
-                    mudarDentista = int(input("Você deseja alterar o dentista? (1) Sim e (2) Não: "))
+                    mudarDentista = int(input("\nVocê deseja alterar o dentista? (1) Sim e (2) Não: "))
                     if mudarDentista == 1:
                         dentista_id = int(input("Digite o código do dentista que você deseja alterar: "))
                     else:
                         dentista_id = None
 
-                    mudarInicio = int(input("Você deseja alterar a data de início? (1) Sim e (2) Não: "))
+                    mudarInicio = int(input("\nVocê deseja alterar a data de início? (1) Sim e (2) Não: "))
                     if mudarInicio == 1:
                         data_hora_inicio = input("Digite a data de início da consulta (yyyy-MM-dd HH:mm:ss): ")
                     else:
                         data_hora_inicio = None
 
-                    mudarFim = int(input("Você deseja alterar a data de fim? (1) Sim e (2) Não: "))
+                    mudarFim = int(input("\nVocê deseja alterar a data de fim? (1) Sim e (2) Não: "))
                     if mudarFim == 1:
                         data_hora_fim = input("Digite a data de fim da consulta (yyyy-MM-dd HH:mm:ss): ")
                     else:
                         data_hora_fim = None
 
-                    mudarDisponibilidade = int(input("Você deseja alterar a disponibilidade? (1) Sim e (2) Não: "))
+                    mudarDisponibilidade = int(input("\nVocê deseja alterar a disponibilidade? (1) Sim e (2) Não: "))
                     if mudarDisponibilidade == 1:
                         disponivel = int(input("Digite a nova disponibilidade: "))
                     else:

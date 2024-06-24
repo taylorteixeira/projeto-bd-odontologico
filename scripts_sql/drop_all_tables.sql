@@ -9,6 +9,8 @@ DROP TABLE IF EXISTS Agendas;
 DROP TABLE IF EXISTS Receitas;
 GO
 
+
+-- Verificando se as tabelas foram removidas
 SELECT * FROM Pacientes;
 SELECT * FROM Dentistas;
 SELECT * FROM Consultas;
