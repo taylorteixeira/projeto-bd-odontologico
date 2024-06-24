@@ -6,7 +6,7 @@ GO
 -- updt
 UPDATE Consultas
 SET DataHora = '2024-12-04 13:30:00'
-WHERE PacienteID = 20;
+WHERE ConsultaID = 1;
 GO
 
 -- del

@@ -1,3 +1,4 @@
+-- índices utilizados na consulta 1
 -- Consultas
 CREATE NONCLUSTERED INDEX IX_Consultas_DataHora ON Consultas (DataHora);
 CREATE NONCLUSTERED INDEX IX_Consultas_PacienteID_DentistaID ON Consultas (PacienteID, DentistaID);
