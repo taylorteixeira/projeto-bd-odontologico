@@ -19,6 +19,8 @@ BEGIN
 END;
 GO
 
+
+
 -- Função para obter o ID do paciente pelo nome
 CREATE FUNCTION dbo.GetPacienteID (@Nome NVARCHAR(100))
 RETURNS INT
@@ -30,6 +32,7 @@ BEGIN
 END;
 GO
 
+
 -- Função para obter o ID do dentista pelo nome
 CREATE FUNCTION dbo.GetDentistaID (@Nome NVARCHAR(100))
 RETURNS INT
@@ -40,3 +43,25 @@ BEGIN
     RETURN @ID;
 END;
 GO
+
+
+
+CREATE FUNCTION ConsultasComNomes()
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT 
+        C.ConsultaID,
+        C.PacienteID,
+        P.Nome AS NomePaciente,
+        C.DentistaID,
+        D.Nome AS NomeDentista,
+        dbo.FormatarDataHoraBrasileira(C.DataHora) AS DataHoraFormatada,
+        C.Motivo
+    FROM Consultas C
+    INNER JOIN Pacientes P ON C.PacienteID = P.PacienteID
+    INNER JOIN Dentistas D ON C.DentistaID = D.DentistaID
+);
+GO
+
