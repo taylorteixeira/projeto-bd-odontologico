@@ -19,10 +19,10 @@ SELECT * FROM Agendas;
 SELECT * FROM Receitas;
 GO
 
-DROP FUNCTION FormatarDataHoraBrasileira;
-DROP TRIGGER trg_AfterInsertConsultas;
-DROP PROCEDURE ExcluirConsulta;
-DROP PROCEDURE InserirConsulta;
-DROP PROCEDURE AgendarConsulta;
-DROP TRIGGER trg_AposInserirConsulta
+DROP FUNCTION IF EXISTS FormatarDataHoraBrasileira;
+DROP TRIGGER IF EXISTS trg_AfterInsertConsultas;
+DROP PROCEDURE IF EXISTS ExcluirConsulta;
+DROP PROCEDURE IF EXISTS InserirConsulta;
+DROP PROCEDURE IF EXISTS AgendarConsulta;
+DROP TRIGGER IF EXISTS trg_AposInserirConsulta
 GO

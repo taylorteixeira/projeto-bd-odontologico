@@ -16,7 +16,7 @@ def main():
         os.system("cls")
 
         while True:
-            print("Escolha uma das opções abaixo:\n1-Adicionar Agendamento\n2-Remover Agendamento\n3-Listar Agendamentos\n4-Mudar Agendamento\n5-Sair do Sistema\n")
+            print("Escolha uma das opções abaixo:\n\n1-Adicionar Agendamento\n2-Remover Agendamento\n3-Listar Agendamentos\n4-Mudar Agendamento\n5-Sair do Sistema\n")
             escolha = int(input("Digite o número da opção desejada: "))
 
             match escolha:
@@ -48,7 +48,7 @@ def main():
                     os.system("cls")
                     print("3-Listar Agendamentos:\n")
                     mostrar_agendas(connection)
-                    input("\nPressione qualquer tecla para continuar...")
+                    input("\nPressione Enter para continuar...")
                     os.system("cls")
 
                 case 4:
