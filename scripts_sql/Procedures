@@ -10,8 +10,6 @@ END;
 GO
 
 
-
-
 CREATE PROCEDURE InserirConsulta
     @NomePaciente VARCHAR(100),
     @NomeDentista VARCHAR(100),
@@ -39,10 +37,8 @@ BEGIN
     -- Retornar os dados da consulta recém-inserida com nomes
     SELECT *
     FROM ConsultasComNomes()
-    WHERE ConsultaID = SCOPE_IDENTITY(); -- SCOPE_IDENTITY() retorna o ID da consulta inserida
 END;
 GO
-
 
 
 -- Procedure para agendar uma consulta
