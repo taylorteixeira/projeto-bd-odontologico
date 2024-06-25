@@ -83,7 +83,7 @@ def mostrar_agendas(connection):
     '''
     cursor.execute(query)
     rows = cursor.fetchall()
-    headers = ["AgendaID", "PacienteID", "DentistaID", "DataHoraInicio", "DataHoraFim", "Disponivel"]
+    headers = ["AgendaID", "PacienteID", "DentistaID", "DataHoraInicio", "DataHoraFim", "Disponibilidade"]
     table = tabulate(rows, headers, tablefmt="grid")
     print(table)
 
