@@ -15,15 +15,12 @@ CREATE CLUSTERED INDEX IX_Paciente_PacienteID ON Paciente (PacienteID);
 
 -- dentistas
 CREATE CLUSTERED INDEX IX_Dentistas_DentistaID ON Dentistas (DentistaID);
-CREATE CLUSTERED INDEX IX_Dentistas_DentistaID ON Dentistas (DentistaID);
-CREATE INDEX IX_Dentistas_Nome_Pacientes_Sexo 
-ON Dentistas (Nome)
+CREATE NONCLUSTERED INDEX IX_Dentistas_Nome_Pacientes_Sexo ON Dentistas (Nome)
 INCLUDE (DentistaID);
 
 
 -- dentistas +custo
-CREATE INDEX IX_Dentistas_Especialidade_Tratamentos_Custo 
-ON Dentistas (Especialidade)
+CREATE INDEX IX_Dentistas_Especialidade_Tratamentos_Custo ON Dentistas (Especialidade)
 INCLUDE (DentistaID);
 
 -- tratamento
