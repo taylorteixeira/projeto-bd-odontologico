@@ -16,18 +16,18 @@ def main():
         os.system("cls")
 
         while True:
-            print("Escolha uma das opções abaixo:\n\n1-Adicionar Agendamento\n2-Remover Agendamento\n3-Listar Agendamentos\n4-Mudar Agendamento\n5-Sair do Sistema\n")
-            escolha = int(input("Digite o número da opção desejada: "))
+            print("Escolha uma das \033[34mopções\033[0m abaixo:\n\n\033[34m1-\033[0m Adicionar Agendamento\n\033[34m2-\033[0m Remover Agendamento\n\033[34m3-\033[0m Listar Agendamentos\n\033[34m4-\033[0m Mudar Agendamento\n\033[34m5-\033[0m Sair do Sistema\n")
+            escolha = int(input("Digite o número da \033[34mopção desejada\033[0m: "))
 
             match escolha:
                 case 1:
                     os.system("cls")
-                    print("1-Adicionar Agendamento\n")
+                    print("\033[34m1- Adicionar Agendamento:\033[0m\n")
                     
-                    paciente_id = int(input("Digite o código do paciente: "))
-                    dentista_id = int(input("Digite o código do dentista: "))
-                    data_hora_inicio = input("Digite a data de início da consulta (yyyy-MM-dd HH:mm:ss): ")
-                    data_hora_fim = input("Digite a data de final da consulta (yyyy-MM-dd HH:mm:ss): ")
+                    paciente_id = int(input("Digite o código do \033[34mpaciente\033[0m: "))
+                    dentista_id = int(input("Digite o código do \033[34mdentista\033[0m: "))
+                    data_hora_inicio = input("Digite a data de \033[34minício da consulta\033[0m (yyyy-MM-dd HH:mm:ss): ")
+                    data_hora_fim = input("Digite a data de \033[34mfinal da consulta\033[0m (yyyy-MM-dd HH:mm:ss): ")
                     disponivel = int(input("Digite (1) para agendamento disponível e (2) para agendamento indisponível: "))
                     
                     add_agendas(connection, paciente_id, dentista_id, data_hora_inicio, data_hora_fim, disponivel)
@@ -36,9 +36,9 @@ def main():
 
                 case 2:
                     os.system("cls")
-                    print("2-Remover Agendamento\n")
+                    print("\033[34m2- Remover Agendamento\033[0m\n")
                     
-                    agenda_id = int(input("Digite o código do agendamento para remover: "))
+                    agenda_id = int(input("Digite o \033[34mcódigo do agendamento\033[0m para remover: "))
                     
                     remover_agendas(connection, agenda_id)
                     time.sleep(2)
@@ -46,42 +46,42 @@ def main():
 
                 case 3:
                     os.system("cls")
-                    print("3-Listar Agendamentos:\n")
+                    print("\033[34m3- Listar Agendamentos:\033[0m\n")
                     mostrar_agendas(connection)
-                    input("\nPressione Enter para continuar...")
+                    input("\nPressione \033[34mEnter\033[0m para continuar...")
                     os.system("cls")
 
                 case 4:
                     os.system("cls")
-                    print("4-Mudar Agendamento\n")
+                    print("\033[34m4- Mudar Agendamento\033[0m\n")
 
-                    agenda_id = int(input("Digite o código da agenda que você deseja alterar: "))
+                    agenda_id = int(input("Digite o \033[34mcódigo da agenda\033[0m que você deseja alterar: "))
                     
-                    mudarPaciente = int(input("Você deseja alterar o paciente? (1) Sim e (2) Não: "))
+                    mudarPaciente = int(input("\nVocê deseja alterar o \033[34mpaciente?\033[0m (1) Sim e (2) Não: "))
                     if mudarPaciente == 1:
-                        paciente_id = int(input("Digite o código do paciente que você deseja alterar: "))
+                        paciente_id = int(input("Digite o código do novo paciente: "))
                     else:
                         paciente_id = None
 
-                    mudarDentista = int(input("\nVocê deseja alterar o dentista? (1) Sim e (2) Não: "))
+                    mudarDentista = int(input("\nVocê deseja alterar o \033[34mdentista?\033[0m (1) Sim e (2) Não: "))
                     if mudarDentista == 1:
-                        dentista_id = int(input("Digite o código do dentista que você deseja alterar: "))
+                        dentista_id = int(input("Digite o código do novo dentista: "))
                     else:
                         dentista_id = None
 
-                    mudarInicio = int(input("\nVocê deseja alterar a data de início? (1) Sim e (2) Não: "))
+                    mudarInicio = int(input("\nVocê deseja alterar a \033[34mdata de início?\033[0m (1) Sim e (2) Não: "))
                     if mudarInicio == 1:
-                        data_hora_inicio = input("Digite a data de início da consulta (yyyy-MM-dd HH:mm:ss): ")
+                        data_hora_inicio = input("Digite a nova data de início da consulta (yyyy-MM-dd HH:mm:ss): ")
                     else:
                         data_hora_inicio = None
 
-                    mudarFim = int(input("\nVocê deseja alterar a data de fim? (1) Sim e (2) Não: "))
+                    mudarFim = int(input("\nVocê deseja alterar a \033[34mdata de fim?\033[0m (1) Sim e (2) Não: "))
                     if mudarFim == 1:
-                        data_hora_fim = input("Digite a data de fim da consulta (yyyy-MM-dd HH:mm:ss): ")
+                        data_hora_fim = input("Digite a nova data de fim da consulta (yyyy-MM-dd HH:mm:ss): ")
                     else:
                         data_hora_fim = None
 
-                    mudarDisponibilidade = int(input("\nVocê deseja alterar a disponibilidade? (1) Sim e (2) Não: "))
+                    mudarDisponibilidade = int(input("\nVocê deseja alterar a \033[34mdisponibilidade?\033[0m (1) Sim e (2) Não: "))
                     if mudarDisponibilidade == 1:
                         disponivel = int(input("Digite a nova disponibilidade: "))
                     else:
@@ -97,7 +97,7 @@ def main():
 
                 case _:
                     os.system("cls")
-                    print("Opção inválida! Tente novamente.")
+                    print("\033[31mOpção inválida!\033[0m Tente novamente.")
                     time.sleep(2)
                     os.system("cls")
 

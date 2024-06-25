@@ -11,6 +11,7 @@ connection_string = (
     "TrustServerCertificate=yes;"
 )
 
+
 def get_connection():
     return pyodbc.connect(connection_string)
 
