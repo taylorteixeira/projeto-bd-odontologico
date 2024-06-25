@@ -1,1 +1,15 @@
-
+-- Trigger para inserir automaticamente na tabela Agendas
+CREATE TRIGGER trg_AfterInsertConsultas
+ON Consultas
+AFTER INSERT
+AS
+BEGIN
+    DECLARE @PacienteID INT, @DentistaID INT, @DataHora DATETIME;
+    
+    SELECT @PacienteID = i.PacienteID, @DentistaID = i.DentistaID, @DataHora = i.DataHora
+    FROM inserted i;
+    
+    INSERT INTO Agendas (PacienteID, DentistaID, DataHoraInicio, DataHoraFim, Disponivel)
+    VALUES (@PacienteID, @DentistaID, @DataHora, DATEADD(MINUTE, 30, @DataHora), 0);
+END;
+GO
