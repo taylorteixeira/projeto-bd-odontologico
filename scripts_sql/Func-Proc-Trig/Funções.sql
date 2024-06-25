@@ -33,6 +33,7 @@ END;
 GO
 
 
+
 -- Função para obter o ID do dentista pelo nome
 CREATE FUNCTION dbo.GetDentistaID (@Nome NVARCHAR(100))
 RETURNS INT
@@ -64,4 +65,3 @@ RETURN
     INNER JOIN Dentistas D ON C.DentistaID = D.DentistaID
 );
 GO
-

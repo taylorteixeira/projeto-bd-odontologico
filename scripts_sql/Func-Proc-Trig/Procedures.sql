@@ -1,4 +1,3 @@
-
 -- Procedimento armazenado para excluir consulta
 CREATE PROCEDURE ExcluirConsulta
     @ConsultaID INT
@@ -8,6 +7,7 @@ BEGIN
     WHERE ConsultaID = @ConsultaID;
 END;
 GO
+
 
 
 CREATE PROCEDURE InserirConsulta
@@ -39,6 +39,7 @@ BEGIN
     FROM ConsultasComNomes()
 END;
 GO
+
 
 
 -- Procedure para agendar uma consulta
