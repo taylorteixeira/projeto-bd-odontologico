@@ -7,7 +7,7 @@ O Projeto tem como objetivo desenvolver uma plataforma adequada para tratamento 
 
 ## 🔧 Intalação:
 1. Clone esse repositório com `git clone` ou baixe o código-fonte.
-2. Em seu terminal, digite: `pip install pyodbc`
+2. Em seu terminal, digite: `pip install pyodbc tabulate`
 
 ## 🚀 Execução:
 Abra o arquivo `main.py` em seu VSCODE e clique em ``run``.
@@ -16,6 +16,7 @@ Abra o arquivo `main.py` em seu VSCODE e clique em ``run``.
 - SQL
 - Python
 - Pyodbc (Biblioteca Python para integração de back-end com SQL externo)
+- Tabulate (Biblioteca Python para apresentação de dados em forma de tabela no terminal)
 
 ## 👷🏽 Desenvolvedores:
 

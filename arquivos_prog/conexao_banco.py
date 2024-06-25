@@ -1,4 +1,5 @@
 import pyodbc
+from tabulate import tabulate
 
 # Define a string de conexão
 connection_string = (
@@ -62,7 +63,7 @@ def add_agendas(connection, paciente_id, dentista_id, data_hora_inicio, data_hor
     '''
     cursor.execute(query, (paciente_id, dentista_id, data_hora_inicio, data_hora_fim, disponivel))
     salvar_alteracoes(connection)
-    print("\nAgendamento adicionado com sucesso.")
+    print("\n\033[92mAgendamento adicionado com sucesso.\033[0m")
 
 # Removendo Agendas
 def remover_agendas(connection, agenda_id):
@@ -72,7 +73,7 @@ def remover_agendas(connection, agenda_id):
     '''
     cursor.execute(query, (agenda_id,))
     salvar_alteracoes(connection)
-    print("\nAgendamento removido com sucesso.")
+    print("\n\033[92mAgendamento removido com sucesso.\033[0m")
 
 # Mostrar Agendas
 def mostrar_agendas(connection):
@@ -82,8 +83,9 @@ def mostrar_agendas(connection):
     '''
     cursor.execute(query)
     rows = cursor.fetchall()
-    for row in rows:
-        print(row)
+    headers = ["AgendaID", "PacienteID", "DentistaID", "DataHoraInicio", "DataHoraFim", "Disponivel"]
+    table = tabulate(rows, headers, tablefmt="grid")
+    print(table)
 
 # Atualizar valores das Agendas
 def mudar_agendas(connection, agenda_id, paciente_id=None, dentista_id=None, data_hora_inicio=None, data_hora_fim=None, disponivel=None):
@@ -99,4 +101,4 @@ def mudar_agendas(connection, agenda_id, paciente_id=None, dentista_id=None, dat
     '''
     cursor.execute(query, (paciente_id, dentista_id, data_hora_inicio, data_hora_fim, disponivel, agenda_id))
     salvar_alteracoes(connection)
-    print("\nAgendamento alterado com sucesso.")
+    print("\n\033[92mAgendamento alterado com sucesso.\033[0m")

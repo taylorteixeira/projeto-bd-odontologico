@@ -102,7 +102,7 @@ def main():
                     os.system("cls")
 
     except pyodbc.Error as e:
-        print("Erro: ", e)
+        print(f"\033[31mErro: {e}\033[0m")
 
     finally:
         if connection:
