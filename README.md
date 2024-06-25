@@ -33,5 +33,5 @@ Abra o arquivo `main.py` em seu VSCODE e clique em ``run``.
 ## 🔭 Demonstração das tabelas e projeto:
 Tabelas que foram usadas na criação disponiveis na pasta "Esquema e Tabelas", juntamente com o link do dbdiagram.io
 
-![image](https://github.com/taylorteixeira/projeto-bd-odontologico/assets/121405251/154e7709-b901-48b6-81cb-6bdaa4d11594)
+![image](https://github.com/taylorteixeira/projeto-bd-odontologico/blob/main/dbdiagram.jpg)
 
